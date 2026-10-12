@@ -1,0 +1,100 @@
+package com.unwrittenparable.narrator;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.unwrittenparable.TheUnwrittenParable;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.loading.FMLPaths;
+
+import java.io.*;
+import java.util.Random;
+
+@OnlyIn(Dist.CLIENT)
+public class ClientNarratorData {
+    private static final String FILE_NAME = "theunwrittenparable_narrator.json";
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static final Random RANDOM = new Random();
+
+    private static ClientNarratorData INSTANCE;
+
+    private NarratorType narratorType;
+    private boolean isMultiplayer;
+    private String multiplayerNarrator;
+
+    private static final String[] MULTIPLAYER_NARRATORS = {"Notch", "Herobrine", "Chuck Norris"};
+
+    public ClientNarratorData() {
+        NarratorType[] types = NarratorType.values();
+        this.narratorType = types[RANDOM.nextInt(types.length)];
+        this.isMultiplayer = false;
+        this.multiplayerNarrator = MULTIPLAYER_NARRATORS[RANDOM.nextInt(MULTIPLAYER_NARRATORS.length)];
+    }
+
+    public static ClientNarratorData get() {
+        if (INSTANCE == null) {
+            INSTANCE = load();
+        }
+        return INSTANCE;
+    }
+
+    public NarratorType getNarratorType() {
+        return narratorType;
+    }
+
+    public void setNarratorType(NarratorType type) {
+        this.narratorType = type;
+        save();
+    }
+
+    public boolean isMultiplayer() {
+        return isMultiplayer;
+    }
+
+    public void setMultiplayer(boolean multiplayer) {
+        if (this.isMultiplayer != multiplayer) {
+            this.isMultiplayer = multiplayer;
+            if (multiplayer) {
+                this.multiplayerNarrator = MULTIPLAYER_NARRATORS[RANDOM.nextInt(MULTIPLAYER_NARRATORS.length)];
+            }
+            save();
+        }
+    }
+
+    public String getMultiplayerNarrator() {
+        return multiplayerNarrator;
+    }
+
+    public void cycleMultiplayerNarrator() {
+        this.multiplayerNarrator = MULTIPLAYER_NARRATORS[RANDOM.nextInt(MULTIPLAYER_NARRATORS.length)];
+        save();
+    }
+
+    private static File getConfigFile() {
+        return new File(FMLPaths.CONFIGDIR.get().toFile(), FILE_NAME);
+    }
+
+    private static ClientNarratorData load() {
+        File file = getConfigFile();
+        if (file.exists()) {
+            try (Reader reader = new FileReader(file)) {
+                ClientNarratorData data = GSON.fromJson(reader, ClientNarratorData.class);
+                if (data != null) {
+                    return data;
+                }
+            } catch (Exception e) {
+                TheUnwrittenParable.LOGGER.error("Failed to load narrator data", e);
+            }
+        }
+        return new ClientNarratorData();
+    }
+
+    private void save() {
+        File file = getConfigFile();
+        try (Writer writer = new FileWriter(file)) {
+            GSON.toJson(this, writer);
+        } catch (Exception e) {
+            TheUnwrittenParable.LOGGER.error("Failed to save narrator data", e);
+        }
+    }
+}

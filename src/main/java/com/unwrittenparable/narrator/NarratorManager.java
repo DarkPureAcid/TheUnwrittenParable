@@ -1,21 +1,24 @@
 package com.unwrittenparable.narrator;
 
 import com.unwrittenparable.config.ModConfig;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.*;
 
+@OnlyIn(Dist.CLIENT)
 public class NarratorManager {
     private static final Map<UUID, Long> LAST_MESSAGE_TIME = new HashMap<>();
     private static final Map<UUID, Boolean> IN_COMBAT = new HashMap<>();
     private static final Random RANDOM = new Random();
 
-    public static void sendMessage(ServerPlayer player, String category) {
+    public static void sendMessage(LocalPlayer player, String category) {
         if (!ModConfig.ENABLE_NARRATOR.get()) return;
 
         UUID playerUUID = player.getUUID();
@@ -49,12 +52,12 @@ public class NarratorManager {
         sendNarratorMessage(player, category);
     }
 
-    public static void broadcastMessage(ServerPlayer player, String category) {
+    public static void broadcastMessage(LocalPlayer player, String category) {
         sendNarratorMessage(player, category);
     }
 
-    private static void sendNarratorMessage(ServerPlayer player, String category) {
-        WorldNarratorData data = WorldNarratorData.get((ServerLevel) player.level());
+    private static void sendNarratorMessage(LocalPlayer player, String category) {
+        ClientNarratorData data = ClientNarratorData.get();
         String messageKey;
         String narratorName;
 
@@ -72,7 +75,7 @@ public class NarratorManager {
         }
     }
 
-    private static void sendTitleMessage(ServerPlayer player, String narratorName, String messageKey, boolean isMultiplayer) {
+    private static void sendTitleMessage(LocalPlayer player, String narratorName, String messageKey, boolean isMultiplayer) {
         Component titleComponent;
         if (isMultiplayer) {
             titleComponent = Component.literal(narratorName).withStyle(style -> style.withColor(0xFF5555));
@@ -89,7 +92,7 @@ public class NarratorManager {
         player.connection.send(animationPacket);
     }
 
-    public static void clearCombatState(ServerPlayer player) {
+    public static void clearCombatState(LocalPlayer player) {
         IN_COMBAT.remove(player.getUUID());
     }
 }

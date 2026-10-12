@@ -3,15 +3,18 @@ package com.unwrittenparable.commands;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+import com.unwrittenparable.narrator.ClientNarratorData;
 import com.unwrittenparable.narrator.NarratorManager;
 import com.unwrittenparable.narrator.NarratorType;
-import com.unwrittenparable.narrator.WorldNarratorData;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class NarratorCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
@@ -31,10 +34,10 @@ public class NarratorCommand {
     }
 
     private static int showInfo(CommandContext<CommandSourceStack> context) {
-        if (!(context.getSource().getEntity() instanceof ServerPlayer player)) return 0;
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null) return 0;
 
-        ServerLevel level = player.serverLevel();
-        WorldNarratorData data = WorldNarratorData.get(level);
+        ClientNarratorData data = ClientNarratorData.get();
 
         player.sendSystemMessage(Component.translatable("commands.narrator.info"));
         if (data.isMultiplayer()) {
@@ -51,7 +54,8 @@ public class NarratorCommand {
     }
 
     private static int testNarrator(CommandContext<CommandSourceStack> context) {
-        if (!(context.getSource().getEntity() instanceof ServerPlayer player)) return 0;
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null) return 0;
 
         int categoryIndex = IntegerArgumentType.getInteger(context, "category");
         String[] categories = {"block_break", "biome_enter", "death", "combat", "idle", "achievement"};
@@ -66,7 +70,8 @@ public class NarratorCommand {
     }
 
     private static int broadcastNarrator(CommandContext<CommandSourceStack> context) {
-        if (!(context.getSource().getEntity() instanceof ServerPlayer player)) return 0;
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null) return 0;
 
         int categoryIndex = IntegerArgumentType.getInteger(context, "category");
         String[] categories = {"block_break", "biome_enter", "death", "combat", "idle", "achievement"};
@@ -81,7 +86,8 @@ public class NarratorCommand {
     }
 
     private static int showHelp(CommandContext<CommandSourceStack> context) {
-        if (!(context.getSource().getEntity() instanceof ServerPlayer player)) return 0;
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null) return 0;
 
         player.sendSystemMessage(Component.translatable("commands.narrator.help"));
         player.sendSystemMessage(Component.translatable("commands.narrator.help_info"));

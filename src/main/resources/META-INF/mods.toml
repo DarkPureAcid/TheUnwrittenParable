@@ -1,6 +1,7 @@
 modLoader="javafml"
 loaderVersion="[47,)"
 license="MIT"
+clientSideOnly=true
 
 [[mods]]
 modId="theunwrittenparable"
@@ -17,11 +18,11 @@ modId="forge"
 mandatory=true
 versionRange="[47,)"
 ordering="NONE"
-side="BOTH"
+side="CLIENT"
 
 [[dependencies.theunwrittenparable]]
 modId="minecraft"
 mandatory=true
 versionRange="[1.20.1]"
 ordering="NONE"
-side="BOTH"
+side="CLIENT"

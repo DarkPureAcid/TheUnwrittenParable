@@ -3,64 +3,62 @@ package com.unwrittenparable.events;
 import com.unwrittenparable.TheUnwrittenParable;
 import com.unwrittenparable.narrator.NarratorManager;
 import com.unwrittenparable.narrator.NarratorType;
-import com.unwrittenparable.narrator.WorldNarratorData;
+import com.unwrittenparable.narrator.ClientNarratorData;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.AdvancementEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.*;
 
+@OnlyIn(Dist.CLIENT)
 public class PlayerEventHandler {
     private static final Map<UUID, ResourceLocation> LAST_BIOME = new HashMap<>();
     private static final Map<UUID, Long> BIOME_CHECK_COOLDOWN = new HashMap<>();
     private static final Map<UUID, Long> LAST_IDLE_MESSAGE = new HashMap<>();
-    private static final Map<UUID, Boolean> LAST_MULTIPLAYER_STATE = new HashMap<>();
     private static final Random RANDOM = new Random();
 
     private static final long IDLE_CHECK_INTERVAL = 30000;
 
     @SubscribeEvent
     public void onBlockBreak(BlockEvent.BreakEvent event) {
-        if (!(event.getPlayer() instanceof ServerPlayer player)) return;
+        if (!(event.getPlayer() instanceof LocalPlayer player)) return;
         NarratorManager.sendMessage(player, "block_break");
     }
 
     @SubscribeEvent
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (!(event.player instanceof ServerPlayer player)) return;
+        if (!(event.player instanceof LocalPlayer player)) return;
         if (event.phase != TickEvent.Phase.END) return;
 
         checkBiomeChange(player);
         checkIdle(player);
-        checkLANState(player);
     }
 
     @SubscribeEvent
     public void onLivingDeath(LivingDeathEvent event) {
-        if (!(event.getEntity() instanceof ServerPlayer player)) return;
-
-        DamageSource source = event.getSource();
-        String deathMessage = getDeathContext(source);
+        if (!(event.getEntity() instanceof LocalPlayer player)) return;
         NarratorManager.sendMessage(player, "death");
     }
 
     @SubscribeEvent
     public void onLivingHurt(LivingHurtEvent event) {
-        if (!(event.getEntity() instanceof ServerPlayer player)) return;
+        if (!(event.getEntity() instanceof LocalPlayer player)) return;
 
         DamageSource source = event.getSource();
         if (isMobDamage(source)) {
@@ -69,41 +67,36 @@ public class PlayerEventHandler {
     }
 
     @SubscribeEvent
-    public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
-        if (!(event.getEntity() instanceof ServerPlayer player)) return;
+    public void onPlayerJoin(ClientPlayerNetworkEvent.LoggingIn event) {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null) return;
 
-        ServerLevel level = player.serverLevel();
-        WorldNarratorData data = WorldNarratorData.get(level);
-
-        boolean isMultiplayer = !player.server.isSingleplayer() || player.server.isPublished();
-        data.setMultiplayer(isMultiplayer);
+        ClientNarratorData data = ClientNarratorData.get();
+        data.setMultiplayer(!Minecraft.getInstance().isSingleplayer());
 
         showAssignedNarrator(player, data);
     }
 
     @SubscribeEvent
-    public void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
-        if (!(event.getEntity() instanceof ServerPlayer player)) return;
+    public void onPlayerRespawn(ClientPlayerNetworkEvent.Clone event) {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null) return;
         NarratorManager.clearCombatState(player);
     }
 
     @SubscribeEvent
     public void onAdvancement(AdvancementEvent event) {
-        if (!(event.getEntity() instanceof ServerPlayer player)) return;
+        if (!(event.getEntity() instanceof LocalPlayer player)) return;
 
         String advancementId = event.getAdvancement().getId().toString();
         boolean hasDisplay = event.getAdvancement().getDisplay() != null;
 
-        TheUnwrittenParable.LOGGER.info("Advancement event: " + advancementId);
-        TheUnwrittenParable.LOGGER.info("Has display: " + hasDisplay);
-
         if (hasDisplay) {
-            TheUnwrittenParable.LOGGER.info("Triggering narrator for: " + advancementId);
             NarratorManager.broadcastMessage(player, "achievement");
         }
     }
 
-    private void checkBiomeChange(ServerPlayer player) {
+    private void checkBiomeChange(LocalPlayer player) {
         UUID uuid = player.getUUID();
         long currentTime = System.currentTimeMillis();
         long lastCheck = BIOME_CHECK_COOLDOWN.getOrDefault(uuid, 0L);
@@ -126,7 +119,7 @@ public class PlayerEventHandler {
         LAST_BIOME.put(uuid, currentBiomeId);
     }
 
-    private void checkIdle(ServerPlayer player) {
+    private void checkIdle(LocalPlayer player) {
         UUID uuid = player.getUUID();
         long currentTime = System.currentTimeMillis();
         long lastIdle = LAST_IDLE_MESSAGE.getOrDefault(uuid, 0L);
@@ -139,43 +132,11 @@ public class PlayerEventHandler {
         }
     }
 
-    private void checkLANState(ServerPlayer player) {
-        UUID uuid = player.getUUID();
-        boolean currentMultiplayer = !player.server.isSingleplayer() || player.server.isPublished();
-        Boolean lastState = LAST_MULTIPLAYER_STATE.get(uuid);
-
-        if (lastState != null && !lastState && currentMultiplayer) {
-            ServerLevel level = player.serverLevel();
-            WorldNarratorData data = WorldNarratorData.get(level);
-            data.setMultiplayer(true);
-
-            player.sendSystemMessage(Component.translatable("narrator.lan.taken_over", Component.literal(data.getMultiplayerNarrator())));
-        }
-
-        LAST_MULTIPLAYER_STATE.put(uuid, currentMultiplayer);
-    }
-
     private boolean isMobDamage(DamageSource source) {
         return source.getEntity() != null && !(source.getEntity() instanceof Player);
     }
 
-    private String getDeathContext(DamageSource source) {
-        if (source.getEntity() != null) {
-            return "killed_by_entity";
-        }
-        if (source.is(DamageTypes.GENERIC_KILL)) {
-            return "void";
-        }
-        if (source.is(DamageTypes.DROWN)) {
-            return "drowned";
-        }
-        if (source.is(DamageTypes.IN_FIRE) || source.is(DamageTypes.ON_FIRE)) {
-            return "fire";
-        }
-        return "generic";
-    }
-
-    private void showAssignedNarrator(ServerPlayer player, WorldNarratorData data) {
+    private void showAssignedNarrator(LocalPlayer player, ClientNarratorData data) {
         player.sendSystemMessage(Component.translatable("narrator.join.title"));
 
         if (data.isMultiplayer()) {

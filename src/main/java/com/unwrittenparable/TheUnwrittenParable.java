@@ -1,9 +1,8 @@
 package com.unwrittenparable;
 
-import com.unwrittenparable.commands.NarratorCommand;
 import com.unwrittenparable.config.ModConfig;
-import com.unwrittenparable.events.PlayerEventHandler;
 import com.unwrittenparable.events.CommandEventHandler;
+import com.unwrittenparable.events.PlayerEventHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -22,6 +21,6 @@ public class TheUnwrittenParable {
         MinecraftForge.EVENT_BUS.register(new PlayerEventHandler());
         MinecraftForge.EVENT_BUS.register(new CommandEventHandler());
 
-        LOGGER.info("The Unwritten Parable loaded.");
+        LOGGER.info("The Unwritten Parable loaded (Client-Side).");
     }
 }
