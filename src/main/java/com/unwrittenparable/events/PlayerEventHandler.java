@@ -112,10 +112,16 @@ public class PlayerEventHandler {
         if (player == null) return;
 
         String message = event.getMessage();
+        TheUnwrittenParable.LOGGER.info("Chat message detected: " + message);
+
         if (message.startsWith("/")) {
+            TheUnwrittenParable.LOGGER.info("Command detected: " + message);
             String reactionKey = CommandReactions.getReaction(message);
             if (reactionKey != null) {
+                TheUnwrittenParable.LOGGER.info("Reaction key: " + reactionKey);
                 NarratorManager.broadcastMessage(player, reactionKey);
+            } else {
+                TheUnwrittenParable.LOGGER.info("No reaction found for command: " + message);
             }
         }
     }
