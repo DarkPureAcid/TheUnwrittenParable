@@ -68,6 +68,29 @@ public class NarratorManager {
         sendNarratorMessage(player, category);
     }
 
+    public static void testSpecificNarrator(LocalPlayer player, String narratorName, String category) {
+        String messageKey;
+        boolean isHerobrine = false;
+
+        if (narratorName.equals("Herobrine") || narratorName.equals("Notch") || narratorName.equals("Chuck Norris")) {
+            messageKey = NarratorMessages.getMultiplayerMessage(category, narratorName);
+            isHerobrine = narratorName.equals("Herobrine");
+        } else {
+            try {
+                NarratorType type = NarratorType.valueOf(narratorName.toUpperCase().replace(" ", "_"));
+                messageKey = NarratorMessages.getMessage(type, category);
+            } catch (IllegalArgumentException e) {
+                player.sendSystemMessage(Component.literal("Unknown narrator: " + narratorName));
+                return;
+            }
+        }
+
+        if (messageKey != null && !messageKey.isEmpty()) {
+            boolean isMultiplayer = narratorName.equals("Herobrine") || narratorName.equals("Notch") || narratorName.equals("Chuck Norris");
+            showNarratorSequence(player, narratorName, messageKey, isMultiplayer, isHerobrine);
+        }
+    }
+
     private static void sendNarratorMessage(LocalPlayer player, String category) {
         ClientNarratorData data = ClientNarratorData.get();
         String messageKey;

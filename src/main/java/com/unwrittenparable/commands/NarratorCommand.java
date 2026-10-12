@@ -2,8 +2,10 @@ package com.unwrittenparable.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.unwrittenparable.narrator.ClientNarratorData;
+import com.unwrittenparable.narrator.NarratorFight;
 import com.unwrittenparable.narrator.NarratorManager;
 import com.unwrittenparable.narrator.NarratorType;
 import net.minecraft.client.Minecraft;
@@ -28,6 +30,16 @@ public class NarratorCommand {
                 .then(Commands.literal("broadcast")
                         .then(Commands.argument("category", IntegerArgumentType.integer(1, 6))
                                 .executes(NarratorCommand::broadcastNarrator)))
+                .then(Commands.literal("testnarrator")
+                        .then(Commands.argument("name", StringArgumentType.word())
+                                .then(Commands.argument("category", IntegerArgumentType.integer(1, 6))
+                                        .executes(NarratorCommand::testSpecificNarrator))))
+                .then(Commands.literal("fight")
+                        .then(Commands.argument("narrator1", StringArgumentType.word())
+                                .then(Commands.argument("narrator2", StringArgumentType.word())
+                                        .executes(NarratorCommand::startFight))))
+                .then(Commands.literal("stopfight")
+                        .executes(NarratorCommand::stopFight))
                 .then(Commands.literal("help")
                         .executes(NarratorCommand::showHelp))
         );
@@ -85,6 +97,43 @@ public class NarratorCommand {
         return 1;
     }
 
+    private static int testSpecificNarrator(CommandContext<CommandSourceStack> context) {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null) return 0;
+
+        String narratorName = StringArgumentType.getString(context, "name");
+        int categoryIndex = IntegerArgumentType.getInteger(context, "category");
+        String[] categories = {"block_break", "biome_enter", "death", "combat", "idle", "achievement"};
+
+        if (categoryIndex < 1 || categoryIndex > categories.length) {
+            player.sendSystemMessage(Component.translatable("commands.narrator.invalid_category"));
+            return 0;
+        }
+
+        NarratorManager.testSpecificNarrator(player, narratorName, categories[categoryIndex - 1]);
+        return 1;
+    }
+
+    private static int startFight(CommandContext<CommandSourceStack> context) {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null) return 0;
+
+        String narrator1 = StringArgumentType.getString(context, "narrator1");
+        String narrator2 = StringArgumentType.getString(context, "narrator2");
+
+        NarratorFight.startFight(player, narrator1, narrator2);
+        return 1;
+    }
+
+    private static int stopFight(CommandContext<CommandSourceStack> context) {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null) return 0;
+
+        NarratorFight.stopFight();
+        player.sendSystemMessage(Component.literal("Fight stopped!"));
+        return 1;
+    }
+
     private static int showHelp(CommandContext<CommandSourceStack> context) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null) return 0;
@@ -94,6 +143,9 @@ public class NarratorCommand {
         player.sendSystemMessage(Component.translatable("commands.narrator.help_test"));
         player.sendSystemMessage(Component.translatable("commands.narrator.help_broadcast"));
         player.sendSystemMessage(Component.translatable("commands.narrator.help_categories"));
+        player.sendSystemMessage(Component.literal("/narrator testnarrator <name> <1-6> - Test a specific narrator"));
+        player.sendSystemMessage(Component.literal("/narrator fight <narrator1> <narrator2> - Start a fight between two narrators"));
+        player.sendSystemMessage(Component.literal("/narrator stopfight - Stop the current fight"));
 
         return 1;
     }

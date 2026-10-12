@@ -244,5 +244,19 @@
   "narrator.join.title": "The Unwritten Parable",
   "narrator.join.subtitle": "Your narrator is: %s",
   "narrator.lan.taken_over": "Narrator taken over by %s",
-  "narrator.herobrine.found": "herobrine.EXE has been found"
+  "narrator.herobrine.found": "herobrine.EXE has been found",
+
+  "narrator.fight.start": "%s throws the first punch!",
+  "narrator.fight.punch1": "%s lands a hit on %s!",
+  "narrator.fight.punch2": "%s dodges and counterattacks!",
+  "narrator.fight.punch3": "%s is fighting back!",
+  "narrator.fight.punch4": "%s is taking damage!",
+  "narrator.fight.punch5": "%s is not backing down!",
+  "narrator.fight.punch6": "%s is gaining the upper hand!",
+  "narrator.fight.punch7": "%s is fighting valiantly!",
+  "narrator.fight.punch8": "%s is weakening!",
+  "narrator.fight.punch9": "%s makes a final stand!",
+  "narrator.fight.punch10": "%s is about to fall!",
+  "narrator.fight.end": "The fight is over!",
+  "narrator.fight.winner": "%s wins the fight!"
 }
