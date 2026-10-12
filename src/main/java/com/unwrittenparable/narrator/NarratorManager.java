@@ -148,28 +148,16 @@ public class NarratorManager {
 
         displayName = limitTextWidth(mc, displayName);
 
-        int color = isHerobrine ? 0xAA00AA : 0xFF5555;
-
-        mc.gui.setTitle(Component.literal(displayName).withStyle(style -> style.withColor(color)));
-        mc.gui.setSubtitle(Component.literal("..."));
-        mc.gui.setTimes(5, 30, 5);
+        NarratorBossBar.showBossBar(displayName, 1500, () -> {
+            if (isHerobrine) {
+                animateHerobrineName(player, narratorName, messageKey);
+            } else {
+                showTitleMessage(player, narratorName, messageKey, isMultiplayer, isHerobrine);
+            }
+        });
 
         if (mc.player != null) {
             mc.player.playNotifySound(SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.AMBIENT, 0.5f, 1.0f);
-        }
-
-        if (isHerobrine) {
-            SCHEDULER.schedule(() -> {
-                Minecraft.getInstance().execute(() -> {
-                    animateHerobrineName(player, narratorName, messageKey);
-                });
-            }, 1000, TimeUnit.MILLISECONDS);
-        } else {
-            SCHEDULER.schedule(() -> {
-                Minecraft.getInstance().execute(() -> {
-                    showTitleMessage(player, narratorName, messageKey, isMultiplayer, isHerobrine);
-                });
-            }, 1500, TimeUnit.MILLISECONDS);
         }
     }
 
