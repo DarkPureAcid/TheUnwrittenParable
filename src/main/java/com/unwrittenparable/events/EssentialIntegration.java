@@ -1,32 +1,37 @@
 package com.unwrittenparable.events;
 
+import com.unwrittenparable.TheUnwrittenParable;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+@OnlyIn(Dist.CLIENT)
 public class EssentialIntegration {
     private static final Random RANDOM = new Random();
-    private static boolean essentialAvailable = false;
-    private static Object essentialApi = null;
-
-    static {
-        try {
-            Class<?> essentialClass = Class.forName("net.essentialmc.EssentialMod");
-            essentialAvailable = true;
-        } catch (ClassNotFoundException e) {
-            essentialAvailable = false;
-        }
-    }
+    private static Boolean essentialAvailable = null;
 
     public static boolean isEssentialAvailable() {
+        if (essentialAvailable == null) {
+            try {
+                Class.forName("net.essentialmc.EssentialMod");
+                essentialAvailable = true;
+                TheUnwrittenParable.LOGGER.info("Essential mod detected!");
+            } catch (ClassNotFoundException e) {
+                essentialAvailable = false;
+                TheUnwrittenParable.LOGGER.info("Essential mod not found. Friends list integration disabled.");
+            }
+        }
         return essentialAvailable;
     }
 
     public static List<String> getFriendsList() {
         List<String> friends = new ArrayList<>();
 
-        if (!essentialAvailable) return friends;
+        if (!isEssentialAvailable()) return friends;
 
         try {
             Class<?> apiClass = Class.forName("net.essentialmc.api.EssentialAPI");
@@ -44,6 +49,7 @@ public class EssentialIntegration {
                 }
             }
         } catch (Exception e) {
+            TheUnwrittenParable.LOGGER.debug("Failed to get Essential friends list", e);
         }
 
         return friends;

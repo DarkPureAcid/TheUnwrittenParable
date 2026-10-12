@@ -9,6 +9,7 @@ public class ModConfig {
     public static final ForgeConfigSpec.BooleanValue ENABLE_NARRATOR;
     public static final ForgeConfigSpec.BooleanValue ENABLE_COMBAT_SILENCE;
     public static final ForgeConfigSpec.BooleanValue ENABLE_DEATH_COMMENTARY;
+    public static final ForgeConfigSpec.BooleanValue ENABLE_ESSENTIAL_INTEGRATION;
 
     static {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -30,6 +31,14 @@ public class ModConfig {
         ENABLE_DEATH_COMMENTARY = builder
                 .comment("Narrator comments when player dies (even during combat)")
                 .define("enableDeathCommentary", true);
+
+        builder.pop();
+
+        builder.comment("Integration Settings").push("integration");
+
+        ENABLE_ESSENTIAL_INTEGRATION = builder
+                .comment("Enable Essential mod integration (friends list as narrator). Requires Essential mod.")
+                .define("enableEssentialIntegration", false);
 
         builder.pop();
 

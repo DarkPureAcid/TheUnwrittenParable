@@ -3,6 +3,8 @@ package com.unwrittenparable.narrator;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.unwrittenparable.TheUnwrittenParable;
+import com.unwrittenparable.config.ModConfig;
+import com.unwrittenparable.events.EssentialIntegration;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.loading.FMLPaths;
@@ -55,7 +57,7 @@ public class ClientNarratorData {
         if (this.isMultiplayer != multiplayer) {
             this.isMultiplayer = multiplayer;
             if (multiplayer) {
-                this.multiplayerNarrator = MULTIPLAYER_NARRATORS[RANDOM.nextInt(MULTIPLAYER_NARRATORS.length)];
+                this.multiplayerNarrator = getRandomMultiplayerNarrator();
             }
             save();
         }
@@ -66,8 +68,18 @@ public class ClientNarratorData {
     }
 
     public void cycleMultiplayerNarrator() {
-        this.multiplayerNarrator = MULTIPLAYER_NARRATORS[RANDOM.nextInt(MULTIPLAYER_NARRATORS.length)];
+        this.multiplayerNarrator = getRandomMultiplayerNarrator();
         save();
+    }
+
+    private String getRandomMultiplayerNarrator() {
+        if (ModConfig.ENABLE_ESSENTIAL_INTEGRATION.get() && EssentialIntegration.isEssentialAvailable()) {
+            String friend = EssentialIntegration.getRandomFriend();
+            if (friend != null) {
+                return friend;
+            }
+        }
+        return MULTIPLAYER_NARRATORS[RANDOM.nextInt(MULTIPLAYER_NARRATORS.length)];
     }
 
     private static File getConfigFile() {
