@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+import com.unwrittenparable.events.HalloweenEvent;
 import com.unwrittenparable.narrator.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -45,6 +46,8 @@ public class NarratorCommand {
                         .executes(NarratorCommand::toggleNarrator))
                 .then(Commands.literal("rules")
                         .executes(NarratorCommand::showRules))
+                .then(Commands.literal("halloween")
+                        .executes(NarratorCommand::toggleHalloween))
                 .then(Commands.literal("help")
                         .executes(NarratorCommand::showHelp))
         );
@@ -183,6 +186,15 @@ public class NarratorCommand {
         player.sendSystemMessage(Component.literal("Combat Silence: " + (rules.isCombatSilenceEnabled() ? "ON" : "OFF")));
         player.sendSystemMessage(Component.literal("Death Commentary: " + (rules.isDeathCommentaryEnabled() ? "ON" : "OFF")));
 
+        return 1;
+    }
+
+    private static int toggleHalloween(CommandContext<CommandSourceStack> context) {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null) return 0;
+
+        HalloweenEvent.toggleHalloween();
+        player.sendSystemMessage(Component.literal("Halloween mode " + (HalloweenEvent.isHalloweenActive() ? "ON" : "OFF")));
         return 1;
     }
 

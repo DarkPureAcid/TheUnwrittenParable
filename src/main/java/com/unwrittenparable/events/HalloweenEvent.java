@@ -115,4 +115,11 @@ public class HalloweenEvent {
     public static void deactivateHalloween() {
         halloweenActive = false;
     }
+
+    public static void toggleHalloween() {
+        halloweenActive = !halloweenActive;
+        if (halloweenActive) {
+            halloweenInitialized = true;
+        }
+    }
 }

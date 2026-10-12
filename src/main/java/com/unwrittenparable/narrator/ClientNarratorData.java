@@ -20,7 +20,7 @@ public class ClientNarratorData {
 
     private static ClientNarratorData INSTANCE;
 
-    private NarratorType narratorType;
+    private String narratorTypeName;
     private boolean isMultiplayer;
     private String multiplayerNarrator;
 
@@ -28,7 +28,7 @@ public class ClientNarratorData {
 
     public ClientNarratorData() {
         NarratorType[] types = NarratorType.values();
-        this.narratorType = types[RANDOM.nextInt(types.length)];
+        this.narratorTypeName = types[RANDOM.nextInt(types.length)].name();
         this.isMultiplayer = false;
         this.multiplayerNarrator = MULTIPLAYER_NARRATORS[RANDOM.nextInt(MULTIPLAYER_NARRATORS.length)];
     }
@@ -41,11 +41,16 @@ public class ClientNarratorData {
     }
 
     public NarratorType getNarratorType() {
-        return narratorType;
+        try {
+            return NarratorType.valueOf(narratorTypeName);
+        } catch (Exception e) {
+            NarratorType[] types = NarratorType.values();
+            return types[RANDOM.nextInt(types.length)];
+        }
     }
 
     public void setNarratorType(NarratorType type) {
-        this.narratorType = type;
+        this.narratorTypeName = type.name();
         save();
     }
 
