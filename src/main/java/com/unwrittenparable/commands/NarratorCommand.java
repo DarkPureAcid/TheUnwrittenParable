@@ -16,6 +16,7 @@ public class NarratorCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("narrator")
+                .requires(source -> source.hasPermission(0))
                 .then(Commands.literal("select")
                         .then(Commands.argument("type", IntegerArgumentType.integer(1, NarratorType.values().length))
                                 .executes(NarratorCommand::selectNarrator)))
