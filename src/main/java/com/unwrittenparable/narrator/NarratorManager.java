@@ -4,9 +4,6 @@ import com.unwrittenparable.config.ModConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
-import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
-import net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -71,11 +68,14 @@ public class NarratorManager {
         }
 
         if (messageKey != null && !messageKey.isEmpty()) {
-            sendTitleMessage(player, narratorName, messageKey, data.isMultiplayer());
+            showTitleMessage(narratorName, messageKey, data.isMultiplayer());
         }
     }
 
-    private static void sendTitleMessage(LocalPlayer player, String narratorName, String messageKey, boolean isMultiplayer) {
+    private static void showTitleMessage(String narratorName, String messageKey, boolean isMultiplayer) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.gui == null) return;
+
         Component titleComponent;
         if (isMultiplayer) {
             titleComponent = Component.literal(narratorName).withStyle(style -> style.withColor(0xFF5555));
@@ -83,13 +83,11 @@ public class NarratorManager {
             titleComponent = Component.translatable("narrator." + narratorName.toLowerCase() + ".name").withStyle(style -> style.withColor(0xFF5555));
         }
 
-        ClientboundSetTitleTextPacket titlePacket = new ClientboundSetTitleTextPacket(titleComponent);
-        ClientboundSetSubtitleTextPacket subtitlePacket = new ClientboundSetSubtitleTextPacket(Component.translatable(messageKey).withStyle(style -> style.withColor(0xFFFFFF)));
-        ClientboundSetTitlesAnimationPacket animationPacket = new ClientboundSetTitlesAnimationPacket(10, 60, 10);
+        Component subtitleComponent = Component.translatable(messageKey).withStyle(style -> style.withColor(0xFFFFFF));
 
-        player.connection.send(titlePacket);
-        player.connection.send(subtitlePacket);
-        player.connection.send(animationPacket);
+        mc.gui.setTitle(titleComponent);
+        mc.gui.setSubtitle(subtitleComponent);
+        mc.gui.setTimes(10, 60, 10);
     }
 
     public static void clearCombatState(LocalPlayer player) {
