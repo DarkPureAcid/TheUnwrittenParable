@@ -32,6 +32,7 @@ public class NarratorManager {
 
     public static void sendMessage(LocalPlayer player, String category) {
         if (!ModConfig.ENABLE_NARRATOR.get()) return;
+        if (!NarratorGameRule.get().isNarratorEnabled()) return;
 
         UUID playerUUID = player.getUUID();
 
@@ -65,8 +66,14 @@ public class NarratorManager {
     }
 
     public static void broadcastMessage(LocalPlayer player, String category) {
+        if (!NarratorGameRule.get().isNarratorEnabled()) return;
+
         if (category.startsWith("narrator.command.") || category.startsWith("narrator.mod.")) {
+            if (!NarratorGameRule.get().isCommandReactionsEnabled()) return;
             sendDirectMessage(player, category);
+        } else if (category.equals("achievement")) {
+            if (!NarratorGameRule.get().isAchievementsEnabled()) return;
+            sendNarratorMessage(player, category);
         } else {
             sendNarratorMessage(player, category);
         }

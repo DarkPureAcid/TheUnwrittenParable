@@ -13,11 +13,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.ClientChatEvent;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
-import net.minecraftforge.event.CommandEvent;
-
-import java.util.*;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -108,45 +104,6 @@ public class PlayerEventHandler {
 
         if (hasDisplay) {
             NarratorManager.broadcastMessage(player, "achievement");
-        }
-    }
-
-    @SubscribeEvent
-    public void onChat(ClientChatEvent event) {
-        LocalPlayer player = Minecraft.getInstance().player;
-        if (player == null) return;
-
-        String message = event.getMessage();
-        TheUnwrittenParable.LOGGER.info("Chat message detected: " + message);
-
-        if (message.startsWith("/")) {
-            TheUnwrittenParable.LOGGER.info("Command detected: " + message);
-            String reactionKey = CommandReactions.getReaction(message);
-            if (reactionKey != null) {
-                TheUnwrittenParable.LOGGER.info("Reaction key: " + reactionKey);
-                NarratorManager.broadcastMessage(player, reactionKey);
-            } else {
-                TheUnwrittenParable.LOGGER.info("No reaction found for command: " + message);
-            }
-        }
-    }
-
-    @SubscribeEvent
-    public void onCommand(CommandEvent event) {
-        LocalPlayer player = Minecraft.getInstance().player;
-        if (player == null) return;
-
-        String command = event.getParseResults().getReader().getString();
-        TheUnwrittenParable.LOGGER.info("CommandEvent fired: " + command);
-        TheUnwrittenParable.LOGGER.info("CommandEvent thread: " + Thread.currentThread().getName());
-
-        if (command.startsWith("/")) {
-            String reactionKey = CommandReactions.getReaction(command);
-            TheUnwrittenParable.LOGGER.info("Reaction key: " + reactionKey);
-            if (reactionKey != null) {
-                TheUnwrittenParable.LOGGER.info("Sending narrator message for command: " + command);
-                NarratorManager.broadcastMessage(player, reactionKey);
-            }
         }
     }
 

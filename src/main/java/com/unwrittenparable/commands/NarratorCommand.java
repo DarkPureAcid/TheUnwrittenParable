@@ -4,10 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
-import com.unwrittenparable.narrator.ClientNarratorData;
-import com.unwrittenparable.narrator.NarratorFight;
-import com.unwrittenparable.narrator.NarratorManager;
-import com.unwrittenparable.narrator.NarratorType;
+import com.unwrittenparable.narrator.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.commands.CommandSourceStack;
@@ -40,6 +37,14 @@ public class NarratorCommand {
                                         .executes(NarratorCommand::startFight))))
                 .then(Commands.literal("stopfight")
                         .executes(NarratorCommand::stopFight))
+                .then(Commands.literal("on")
+                        .executes(NarratorCommand::enableNarrator))
+                .then(Commands.literal("off")
+                        .executes(NarratorCommand::disableNarrator))
+                .then(Commands.literal("toggle")
+                        .executes(NarratorCommand::toggleNarrator))
+                .then(Commands.literal("rules")
+                        .executes(NarratorCommand::showRules))
                 .then(Commands.literal("help")
                         .executes(NarratorCommand::showHelp))
         );
@@ -50,8 +55,11 @@ public class NarratorCommand {
         if (player == null) return 0;
 
         ClientNarratorData data = ClientNarratorData.get();
+        NarratorGameRule rules = NarratorGameRule.get();
 
         player.sendSystemMessage(Component.translatable("commands.narrator.info"));
+        player.sendSystemMessage(Component.literal("Narrator: " + (rules.isNarratorEnabled() ? "ON" : "OFF")));
+
         if (data.isMultiplayer()) {
             player.sendSystemMessage(Component.translatable("commands.narrator.mode_multiplayer"));
             player.sendSystemMessage(Component.translatable("commands.narrator.narrator", Component.literal(data.getMultiplayerNarrator())));
@@ -134,6 +142,50 @@ public class NarratorCommand {
         return 1;
     }
 
+    private static int enableNarrator(CommandContext<CommandSourceStack> context) {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null) return 0;
+
+        NarratorGameRule.get().setNarratorEnabled(true);
+        player.sendSystemMessage(Component.literal("Narrator enabled!"));
+        return 1;
+    }
+
+    private static int disableNarrator(CommandContext<CommandSourceStack> context) {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null) return 0;
+
+        NarratorGameRule.get().setNarratorEnabled(false);
+        player.sendSystemMessage(Component.literal("Narrator disabled!"));
+        return 1;
+    }
+
+    private static int toggleNarrator(CommandContext<CommandSourceStack> context) {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null) return 0;
+
+        NarratorGameRule rules = NarratorGameRule.get();
+        rules.setNarratorEnabled(!rules.isNarratorEnabled());
+        player.sendSystemMessage(Component.literal("Narrator " + (rules.isNarratorEnabled() ? "enabled" : "disabled") + "!"));
+        return 1;
+    }
+
+    private static int showRules(CommandContext<CommandSourceStack> context) {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null) return 0;
+
+        NarratorGameRule rules = NarratorGameRule.get();
+
+        player.sendSystemMessage(Component.literal("=== Narrator Game Rules ==="));
+        player.sendSystemMessage(Component.literal("Narrator: " + (rules.isNarratorEnabled() ? "ON" : "OFF")));
+        player.sendSystemMessage(Component.literal("Command Reactions: " + (rules.isCommandReactionsEnabled() ? "ON" : "OFF")));
+        player.sendSystemMessage(Component.literal("Achievements: " + (rules.isAchievementsEnabled() ? "ON" : "OFF")));
+        player.sendSystemMessage(Component.literal("Combat Silence: " + (rules.isCombatSilenceEnabled() ? "ON" : "OFF")));
+        player.sendSystemMessage(Component.literal("Death Commentary: " + (rules.isDeathCommentaryEnabled() ? "ON" : "OFF")));
+
+        return 1;
+    }
+
     private static int showHelp(CommandContext<CommandSourceStack> context) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null) return 0;
@@ -146,6 +198,10 @@ public class NarratorCommand {
         player.sendSystemMessage(Component.literal("/narrator testnarrator <name> <1-6> - Test a specific narrator"));
         player.sendSystemMessage(Component.literal("/narrator fight <narrator1> <narrator2> - Start a fight between two narrators"));
         player.sendSystemMessage(Component.literal("/narrator stopfight - Stop the current fight"));
+        player.sendSystemMessage(Component.literal("/narrator on - Enable narrator"));
+        player.sendSystemMessage(Component.literal("/narrator off - Disable narrator"));
+        player.sendSystemMessage(Component.literal("/narrator toggle - Toggle narrator"));
+        player.sendSystemMessage(Component.literal("/narrator rules - Show game rules"));
 
         return 1;
     }
