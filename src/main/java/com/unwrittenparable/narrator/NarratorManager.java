@@ -60,6 +60,24 @@ public class NarratorManager {
         }
     }
 
+    public static void broadcastMessage(ServerPlayer player, String category) {
+        WorldNarratorData data = WorldNarratorData.get((ServerLevel) player.level());
+        String message;
+
+        if (data.isMultiplayer()) {
+            String narratorName = data.getMultiplayerNarrator();
+            message = NarratorMessages.getMultiplayerMessage(category, narratorName);
+        } else {
+            NarratorType type = data.getNarratorType();
+            message = NarratorMessages.getMessage(type, category);
+        }
+
+        if (message != null && !message.isEmpty()) {
+            String formattedMessage = formatNarratorMessage(message, data);
+            player.sendSystemMessage(Component.literal(formattedMessage));
+        }
+    }
+
     public static void clearCombatState(ServerPlayer player) {
         IN_COMBAT.remove(player.getUUID());
     }
