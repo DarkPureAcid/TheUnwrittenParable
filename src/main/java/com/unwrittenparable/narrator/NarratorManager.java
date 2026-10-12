@@ -156,6 +156,10 @@ public class NarratorManager {
         mc.gui.setTitle(titleComponent);
         mc.gui.setSubtitle(subtitleComponent);
         mc.gui.setTimes(10, 60, 10);
+
+        if (mc.player != null) {
+            mc.player.playNotifySound(SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.AMBIENT, 0.5f, 1.0f);
+        }
     }
 
     private static String limitTextWidth(Minecraft mc, String text) {
