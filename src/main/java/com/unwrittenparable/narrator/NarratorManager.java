@@ -1,6 +1,7 @@
 package com.unwrittenparable.narrator;
 
 import com.unwrittenparable.config.ModConfig;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.network.chat.Component;
 
@@ -42,7 +43,7 @@ public class NarratorManager {
 
         LAST_MESSAGE_TIME.put(playerUUID, currentTime);
 
-        WorldNarratorData data = WorldNarratorData.get(player.level());
+        WorldNarratorData data = WorldNarratorData.get((ServerLevel) player.level());
         String message;
 
         if (data.isMultiplayer()) {

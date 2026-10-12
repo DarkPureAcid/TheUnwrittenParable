@@ -8,6 +8,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
@@ -128,13 +129,13 @@ public class PlayerEventHandler {
         if (source.getEntity() != null) {
             return "killed_by_entity";
         }
-        if (source == DamageSource.OUT_OF_WORLD) {
+        if (source.is(DamageTypes.GENERIC_KILL)) {
             return "void";
         }
-        if (source == DamageSource.DROWN) {
+        if (source.is(DamageTypes.DROWN)) {
             return "drowned";
         }
-        if (source == DamageSource.ON_FIRE) {
+        if (source.is(DamageTypes.IN_FIRE) || source.is(DamageTypes.ON_FIRE)) {
             return "fire";
         }
         return "generic";
