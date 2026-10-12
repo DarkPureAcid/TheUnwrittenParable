@@ -218,5 +218,6 @@
   "commands.narrator.invalid_category": "Invalid category. Use 1-6.",
 
   "narrator.join.title": "The Unwritten Parable",
-  "narrator.join.subtitle": "Your narrator is: %s"
+  "narrator.join.subtitle": "Your narrator is: %s",
+  "narrator.lan.taken_over": "Narrator taken over by %s"
 }

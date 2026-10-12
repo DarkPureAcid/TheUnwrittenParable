@@ -28,6 +28,7 @@ public class PlayerEventHandler {
     private static final Map<UUID, ResourceLocation> LAST_BIOME = new HashMap<>();
     private static final Map<UUID, Long> BIOME_CHECK_COOLDOWN = new HashMap<>();
     private static final Map<UUID, Long> LAST_IDLE_MESSAGE = new HashMap<>();
+    private static final Map<UUID, Boolean> LAST_MULTIPLAYER_STATE = new HashMap<>();
     private static final Random RANDOM = new Random();
 
     private static final long IDLE_CHECK_INTERVAL = 30000;
@@ -45,6 +46,7 @@ public class PlayerEventHandler {
 
         checkBiomeChange(player);
         checkIdle(player);
+        checkLANState(player);
     }
 
     @SubscribeEvent
@@ -135,6 +137,22 @@ public class PlayerEventHandler {
             NarratorManager.sendMessage(player, "idle");
             LAST_IDLE_MESSAGE.put(uuid, currentTime);
         }
+    }
+
+    private void checkLANState(ServerPlayer player) {
+        UUID uuid = player.getUUID();
+        boolean currentMultiplayer = !player.server.isSingleplayer() || player.server.isPublished();
+        Boolean lastState = LAST_MULTIPLAYER_STATE.get(uuid);
+
+        if (lastState != null && !lastState && currentMultiplayer) {
+            ServerLevel level = player.serverLevel();
+            WorldNarratorData data = WorldNarratorData.get(level);
+            data.setMultiplayer(true);
+
+            player.sendSystemMessage(Component.translatable("narrator.lan.taken_over", Component.translatable("narrator." + data.getMultiplayerNarrator().toLowerCase() + ".name")));
+        }
+
+        LAST_MULTIPLAYER_STATE.put(uuid, currentMultiplayer);
     }
 
     private boolean isMobDamage(DamageSource source) {
