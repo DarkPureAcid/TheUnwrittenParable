@@ -18,6 +18,8 @@ public class WorldNarratorData extends SavedData {
     private static final Random RANDOM = new Random();
 
     public WorldNarratorData() {
+        NarratorType[] types = NarratorType.values();
+        this.narratorType = types[RANDOM.nextInt(types.length)];
     }
 
     public static WorldNarratorData load(CompoundTag tag) {

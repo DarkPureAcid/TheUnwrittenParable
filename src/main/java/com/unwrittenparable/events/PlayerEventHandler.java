@@ -1,5 +1,6 @@
 package com.unwrittenparable.events;
 
+import com.unwrittenparable.TheUnwrittenParable;
 import com.unwrittenparable.narrator.NarratorManager;
 import com.unwrittenparable.narrator.NarratorType;
 import com.unwrittenparable.narrator.WorldNarratorData;
@@ -75,9 +76,7 @@ public class PlayerEventHandler {
         boolean isServer = !player.server.isSingleplayer();
         data.setMultiplayer(isServer);
 
-        if (!isServer) {
-            showNarratorSelection(player, data);
-        }
+        showAssignedNarrator(player, data);
     }
 
     @SubscribeEvent
@@ -89,6 +88,9 @@ public class PlayerEventHandler {
     @SubscribeEvent
     public void onAdvancement(AdvancementEvent.AdvancementEarnEvent event) {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
+
+        TheUnwrittenParable.LOGGER.info("Advancement earned: " + event.getAdvancement().getId());
+        TheUnwrittenParable.LOGGER.info("Has display: " + (event.getAdvancement().getDisplay() != null));
 
         if (event.getAdvancement().getDisplay() != null) {
             NarratorManager.sendMessage(player, "achievement");
@@ -151,16 +153,14 @@ public class PlayerEventHandler {
         return "generic";
     }
 
-    private void showNarratorSelection(ServerPlayer player, WorldNarratorData data) {
+    private void showAssignedNarrator(ServerPlayer player, WorldNarratorData data) {
         player.sendSystemMessage(Component.literal("=== The Unwritten Parable ==="));
-        player.sendSystemMessage(Component.literal("Choose your narrator personality:"));
 
-        NarratorType[] types = NarratorType.values();
-        for (int i = 0; i < types.length; i++) {
-            player.sendSystemMessage(Component.literal((i + 1) + ". " + types[i].getDisplayName() + " - " + types[i].getDescription()));
+        if (data.isMultiplayer()) {
+            player.sendSystemMessage(Component.literal("Your narrator is: " + data.getMultiplayerNarrator()));
+        } else {
+            player.sendSystemMessage(Component.literal("Your narrator is: " + data.getNarratorType().getDisplayName()));
+            player.sendSystemMessage(Component.literal("\"" + data.getNarratorType().getDescription() + "\""));
         }
-
-        player.sendSystemMessage(Component.literal("Type the number in chat to select."));
-        player.sendSystemMessage(Component.literal("Default: Stanley"));
     }
 }
