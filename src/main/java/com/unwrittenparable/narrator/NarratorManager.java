@@ -1,9 +1,13 @@
 package com.unwrittenparable.narrator;
 
 import com.unwrittenparable.config.ModConfig;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
+import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
+import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
+import net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.network.chat.Component;
 
 import java.util.*;
 
@@ -11,6 +15,8 @@ public class NarratorManager {
     private static final Map<UUID, Long> LAST_MESSAGE_TIME = new HashMap<>();
     private static final Map<UUID, Boolean> IN_COMBAT = new HashMap<>();
     private static final Random RANDOM = new Random();
+
+    private static final Set<String> TITLE_CATEGORIES = new HashSet<>(Arrays.asList("death", "achievement"));
 
     public static void sendMessage(ServerPlayer player, String category) {
         if (!ModConfig.ENABLE_NARRATOR.get()) return;
@@ -43,24 +49,14 @@ public class NarratorManager {
 
         LAST_MESSAGE_TIME.put(playerUUID, currentTime);
 
-        WorldNarratorData data = WorldNarratorData.get((ServerLevel) player.level());
-        String message;
-
-        if (data.isMultiplayer()) {
-            String narratorName = data.getMultiplayerNarrator();
-            message = NarratorMessages.getMultiplayerMessage(category, narratorName);
-        } else {
-            NarratorType type = data.getNarratorType();
-            message = NarratorMessages.getMessage(type, category);
-        }
-
-        if (message != null && !message.isEmpty()) {
-            String formattedMessage = formatNarratorMessage(message, data);
-            player.sendSystemMessage(Component.literal(formattedMessage));
-        }
+        sendNarratorMessage(player, category);
     }
 
     public static void broadcastMessage(ServerPlayer player, String category) {
+        sendNarratorMessage(player, category);
+    }
+
+    private static void sendNarratorMessage(ServerPlayer player, String category) {
         WorldNarratorData data = WorldNarratorData.get((ServerLevel) player.level());
         String message;
 
@@ -73,22 +69,33 @@ public class NarratorManager {
         }
 
         if (message != null && !message.isEmpty()) {
-            String formattedMessage = formatNarratorMessage(message, data);
-            player.sendSystemMessage(Component.literal(formattedMessage));
+            String narratorName = data.isMultiplayer() ? data.getMultiplayerNarrator() : data.getNarratorType().getDisplayName();
+
+            if (TITLE_CATEGORIES.contains(category)) {
+                sendTitleMessage(player, narratorName, message);
+            } else {
+                sendActionBarMessage(player, narratorName, message);
+            }
         }
+    }
+
+    private static void sendActionBarMessage(ServerPlayer player, String narratorName, String message) {
+        String formatted = "§e[" + narratorName + "]§f " + message;
+        ClientboundSetActionBarTextPacket packet = new ClientboundSetActionBarTextPacket(Component.literal(formatted));
+        player.connection.send(packet);
+    }
+
+    private static void sendTitleMessage(ServerPlayer player, String narratorName, String message) {
+        ClientboundSetTitleTextPacket titlePacket = new ClientboundSetTitleTextPacket(Component.literal("§c" + narratorName));
+        ClientboundSetSubtitleTextPacket subtitlePacket = new ClientboundSetSubtitleTextPacket(Component.literal("§f" + message));
+        ClientboundSetTitlesAnimationPacket animationPacket = new ClientboundSetTitlesAnimationPacket(10, 60, 10);
+
+        player.connection.send(titlePacket);
+        player.connection.send(subtitlePacket);
+        player.connection.send(animationPacket);
     }
 
     public static void clearCombatState(ServerPlayer player) {
         IN_COMBAT.remove(player.getUUID());
-    }
-
-    private static String formatNarratorMessage(String message, WorldNarratorData data) {
-        String prefix;
-        if (data.isMultiplayer()) {
-            prefix = data.getMultiplayerNarrator();
-        } else {
-            prefix = data.getNarratorType().getDisplayName();
-        }
-        return "[" + prefix + "] " + message;
     }
 }
