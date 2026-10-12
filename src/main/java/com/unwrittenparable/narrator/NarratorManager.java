@@ -65,7 +65,27 @@ public class NarratorManager {
     }
 
     public static void broadcastMessage(LocalPlayer player, String category) {
-        sendNarratorMessage(player, category);
+        if (category.startsWith("narrator.command.") || category.startsWith("narrator.mod.")) {
+            sendDirectMessage(player, category);
+        } else {
+            sendNarratorMessage(player, category);
+        }
+    }
+
+    private static void sendDirectMessage(LocalPlayer player, String messageKey) {
+        ClientNarratorData data = ClientNarratorData.get();
+        String narratorName;
+        boolean isHerobrine = false;
+
+        if (data.isMultiplayer()) {
+            narratorName = data.getMultiplayerNarrator();
+            isHerobrine = narratorName.equals("Herobrine");
+        } else {
+            NarratorType type = data.getNarratorType();
+            narratorName = type.getDisplayName();
+        }
+
+        showNarratorSequence(player, narratorName, messageKey, data.isMultiplayer(), isHerobrine);
     }
 
     public static void testSpecificNarrator(LocalPlayer player, String narratorName, String category) {

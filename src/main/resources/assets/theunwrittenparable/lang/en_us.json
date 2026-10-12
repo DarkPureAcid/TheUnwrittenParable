@@ -258,5 +258,63 @@
   "narrator.fight.punch9": "%s makes a final stand!",
   "narrator.fight.punch10": "%s is about to fall!",
   "narrator.fight.end": "The fight is over!",
-  "narrator.fight.winner": "%s wins the fight!"
+  "narrator.fight.winner": "%s wins the fight!",
+
+  "narrator.command.tp.1": "Ah, teleportation. The player decided to skip the walking part. How efficient.",
+  "narrator.command.tp.2": "The player used the teleport command. The narrator had planned a lovely journey for them.",
+  "narrator.command.tp.3": "Teleportation. Because walking is for people who don't know the console exists.",
+  "narrator.command.tp.4": "The player appeared somewhere else. The narrator sighed. He'd been narrating that walk.",
+
+  "narrator.command.gamemode.1": "The player changed their gamemode. The narrator noticed. He always notices.",
+  "narrator.command.gamemode.2": "Ah, creative mode. The player decided they didn't need the narrator's challenges.",
+  "narrator.command.gamemode.3": "The player switched gamemodes. The narrator switched his level of interest.",
+  "narrator.command.gamemode.4": "Gamemode changed. The narrator considered changing his narration style. Then decided against it.",
+
+  "narrator.command.gamerule.1": "The player changed a gamerule. The narrator's rules remain unchanged.",
+  "narrator.command.gamerule.2": "Ah, gamerules. The player thinks they're in control. The narrator knows better.",
+  "narrator.command.gamerule.3": "The player modified the game's rules. The narrator's rules are immutable.",
+  "narrator.command.gamerule.4": "Gamerule changed. The narrator made a note. He always makes notes.",
+
+  "narrator.command.time.1": "The player changed the time. The narrator's clock remains accurate.",
+  "narrator.command.time.2": "Ah, time manipulation. The player thinks they can control time. The narrator disagrees.",
+  "narrator.command.time.3": "The player set the time. The narrator set his watch. He's always prepared.",
+  "narrator.command.time.4": "Time changed. The narrator's schedule remains unchanged. He's very punctual.",
+
+  "narrator.command.weather.1": "The player changed the weather. The narrator's mood remains the same.",
+  "narrator.command.weather.2": "Ah, weather control. The player thinks they can change the atmosphere. The narrator controls the narrative.",
+  "narrator.command.weather.3": "The player modified the weather. The narrator modified his tone. Slightly.",
+  "narrator.command.weather.4": "Weather changed. The narrator's forecast remains unchanged. It's always narrating.",
+
+  "narrator.command.give.1": "The player gave themselves items. The narrator gave himself a disappointed look.",
+  "narrator.command.give.2": "Ah, item generation. The player decided they needed help. The narrator disagrees.",
+  "narrator.command.give.3": "The player received items. The narrator received nothing. He's not bitter.",
+  "narrator.command.give.4": "Items given. The narrator's patience taken. He'll recover. Probably.",
+
+  "narrator.command.kill.1": "The player used the kill command. The narrator winced. That was harsh.",
+  "narrator.command.kill.2": "Ah, the kill command. The player decided to skip the fighting. How merciful.",
+  "narrator.command.kill.3": "The player eliminated something. The narrator eliminated his surprise.",
+  "narrator.command.kill.4": "Kill command used. The narrator's empathy remains intact. Barely.",
+
+  "narrator.command.effect.1": "The player gave themselves an effect. The narrator's effect is permanent.",
+  "narrator.command.effect.2": "Ah, potion effects. The player decided to enhance themselves. The narrator is already enhanced.",
+  "narrator.command.effect.3": "The player received an effect. The narrator received an opportunity to comment.",
+  "narrator.command.effect.4": "Effect applied. The narrator's effect on the story remains unchanged.",
+
+  "narrator.command.enchant.1": "The player enchanted something. The narrator's words are already magical.",
+  "narrator.command.enchant.2": "Ah, enchantments. The player decided to improve their gear. The narrator improves the story.",
+  "narrator.command.enchant.3": "The player added enchantments. The narrator added commentary. He always adds commentary.",
+  "narrator.command.enchant.4": "Enchantment applied. The narrator's enchantment on the player continues.",
+
+  "narrator.command.summon.1": "The player summoned something. The narrator summons his attention.",
+  "narrator.command.summon.2": "Ah, summoning. The player decided to create life. The narrator creates narrative.",
+  "narrator.command.summon.3": "The player summoned an entity. The narrator summoned his patience.",
+  "narrator.command.summon.4": "Entity summoned. The narrator's presence remains. It always remains.",
+
+  "narrator.command.difficulty.1": "The player changed the difficulty. The narrator's difficulty is eternal.",
+  "narrator.command.difficulty.2": "Ah, difficulty settings. The player decided the game was too hard. The narrator disagrees.",
+  "narrator.command.difficulty.3": "The player modified the difficulty. The narrator modified his expectations.",
+  "narrator.command.difficulty.4": "Difficulty changed. The narrator's challenge remains. He's very challenging.",
+
+  "narrator.mod.enigmatic_legacy": "The player has Enigmatic Legacy installed. The Dormant Eye watches. The narrator watches too.",
+  "narrator.mod.enigmatic_legacy.dormant_eye": "The Dormant Eye stirs. The narrator takes notes. He always takes notes."
 }

@@ -1,9 +1,7 @@
 package com.unwrittenparable.events;
 
 import com.unwrittenparable.TheUnwrittenParable;
-import com.unwrittenparable.narrator.ClientNarratorData;
-import com.unwrittenparable.narrator.NarratorManager;
-import com.unwrittenparable.narrator.NarratorType;
+import com.unwrittenparable.narrator.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
@@ -12,10 +10,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.ClientChatEvent;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -82,6 +80,12 @@ public class PlayerEventHandler {
         LAST_MULTIPLAYER_STATE.put(player.getUUID(), isMultiplayer);
 
         showAssignedNarrator(player, data);
+
+        ModScanner.scanMods();
+
+        if (ModScanner.isModInstalled("enigmatic_legacy")) {
+            NarratorManager.broadcastMessage(player, "mod_enigmatic_legacy");
+        }
     }
 
     @SubscribeEvent
@@ -99,6 +103,20 @@ public class PlayerEventHandler {
 
         if (hasDisplay) {
             NarratorManager.broadcastMessage(player, "achievement");
+        }
+    }
+
+    @SubscribeEvent
+    public void onChat(ClientChatEvent event) {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null) return;
+
+        String message = event.getMessage();
+        if (message.startsWith("/")) {
+            String reactionKey = CommandReactions.getReaction(message);
+            if (reactionKey != null) {
+                NarratorManager.broadcastMessage(player, reactionKey);
+            }
         }
     }
 
