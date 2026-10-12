@@ -87,7 +87,7 @@ public class PlayerEventHandler {
     }
 
     @SubscribeEvent
-    public void onAdvancement(AdvancementEvent event) {
+    public void onAdvancement(AdvancementEvent.AdvancementEarnEvent event) {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
 
         if (event.getAdvancement().getDisplay() != null) {
