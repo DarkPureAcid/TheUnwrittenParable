@@ -74,9 +74,35 @@ public class NarratorManager {
         } else if (category.equals("achievement")) {
             if (!NarratorGameRule.get().isAchievementsEnabled()) return;
             sendNarratorMessage(player, category);
+        } else if (category.equals("gamemode_change")) {
+            sendGamemodeChangeMessage(player);
         } else {
             sendNarratorMessage(player, category);
         }
+    }
+
+    private static void sendGamemodeChangeMessage(LocalPlayer player) {
+        ClientNarratorData data = ClientNarratorData.get();
+        String narratorName;
+        boolean isHerobrine = false;
+
+        if (data.isMultiplayer()) {
+            narratorName = data.getMultiplayerNarrator();
+            isHerobrine = narratorName.equals("Herobrine");
+        } else {
+            NarratorType type = data.getNarratorType();
+            narratorName = type.getDisplayName();
+        }
+
+        String[] messages = {
+                "narrator.gamemode_change.1",
+                "narrator.gamemode_change.2",
+                "narrator.gamemode_change.3",
+                "narrator.gamemode_change.4"
+        };
+
+        String messageKey = messages[RANDOM.nextInt(messages.length)];
+        showNarratorSequence(player, narratorName, messageKey, data.isMultiplayer(), isHerobrine);
     }
 
     private static void sendDirectMessage(LocalPlayer player, String messageKey) {

@@ -58,6 +58,8 @@ public class NarratorFight {
         Random random = new Random();
         String[] fighters = {narrator1, narrator2};
 
+        boolean hasChuckNorris = narrator1.equals("Chuck Norris") || narrator2.equals("Chuck Norris");
+
         for (int i = 0; i < FIGHT_MESSAGES.length; i++) {
             if (!fightInProgress) break;
 
@@ -84,16 +86,18 @@ public class NarratorFight {
             Thread.sleep(delay);
         }
 
-        boolean chuckNorrisWins = random.nextBoolean();
         String winner;
+        String winMessage;
 
-        if (narrator1.equals("Chuck Norris") || narrator2.equals("Chuck Norris")) {
-            winner = chuckNorrisWins ? "Chuck Norris" : (narrator1.equals("Chuck Norris") ? narrator2 : narrator1);
+        if (hasChuckNorris) {
+            winner = "Chuck Norris";
+            String opponent = narrator1.equals("Chuck Norris") ? narrator2 : narrator1;
+            winMessage = I18n.get("narrator.fight.surrender", opponent);
         } else {
             winner = random.nextBoolean() ? narrator1 : narrator2;
+            winMessage = I18n.get("narrator.fight.winner", winner);
         }
 
-        String winMessage = I18n.get("narrator.fight.winner", winner);
         showFightTitle(player, winner, winMessage, true);
 
         if (Minecraft.getInstance().player != null) {

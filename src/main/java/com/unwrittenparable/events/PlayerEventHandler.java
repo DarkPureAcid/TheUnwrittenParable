@@ -36,6 +36,7 @@ public class PlayerEventHandler {
     private static final long LAN_CHECK_INTERVAL = 5000;
     private static long lastLANCheck = 0;
     private static String lastCommand = "";
+    private static net.minecraft.world.level.GameType lastGameMode = null;
 
     @SubscribeEvent
     public void onBlockBreak(BlockEvent.BreakEvent event) {
@@ -52,6 +53,7 @@ public class PlayerEventHandler {
         checkIdle(player);
         checkLANState(player);
         checkCommandInput(player);
+        checkGameModeChange(player);
     }
 
     @SubscribeEvent
@@ -216,6 +218,28 @@ public class PlayerEventHandler {
                 }
             }
         } catch (Exception e) {
+        }
+    }
+
+    private void checkGameModeChange(LocalPlayer player) {
+        try {
+            java.lang.reflect.Field gameModeField = player.getClass().getSuperclass().getDeclaredField("f_108620_");
+            gameModeField.setAccessible(true);
+            Object gameModeController = gameModeField.get(player);
+
+            if (gameModeController != null) {
+                java.lang.reflect.Method getGameModeMethod = gameModeController.getClass().getMethod("m_104805_");
+                net.minecraft.world.level.GameType currentGameMode = (net.minecraft.world.level.GameType) getGameModeMethod.invoke(gameModeController);
+
+                if (lastGameMode != null && !lastGameMode.equals(currentGameMode)) {
+                    TheUnwrittenParable.LOGGER.info("Game mode changed from " + lastGameMode + " to " + currentGameMode);
+                    NarratorManager.broadcastMessage(player, "gamemode_change");
+                }
+
+                lastGameMode = currentGameMode;
+            }
+        } catch (Exception e) {
+            TheUnwrittenParable.LOGGER.debug("Failed to check game mode", e);
         }
     }
 
