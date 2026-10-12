@@ -39,7 +39,7 @@ public class NarratorCommand {
         player.sendSystemMessage(Component.translatable("commands.narrator.info"));
         if (data.isMultiplayer()) {
             player.sendSystemMessage(Component.translatable("commands.narrator.mode_multiplayer"));
-            player.sendSystemMessage(Component.translatable("commands.narrator.narrator", Component.translatable("narrator." + data.getMultiplayerNarrator().toLowerCase() + ".name")));
+            player.sendSystemMessage(Component.translatable("commands.narrator.narrator", Component.literal(data.getMultiplayerNarrator())));
         } else {
             String narratorKey = data.getNarratorType().getDisplayName().toLowerCase();
             player.sendSystemMessage(Component.translatable("commands.narrator.mode_singleplayer"));

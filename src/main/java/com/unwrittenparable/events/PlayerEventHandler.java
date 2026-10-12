@@ -149,7 +149,7 @@ public class PlayerEventHandler {
             WorldNarratorData data = WorldNarratorData.get(level);
             data.setMultiplayer(true);
 
-            player.sendSystemMessage(Component.translatable("narrator.lan.taken_over", Component.translatable("narrator." + data.getMultiplayerNarrator().toLowerCase() + ".name")));
+            player.sendSystemMessage(Component.translatable("narrator.lan.taken_over", Component.literal(data.getMultiplayerNarrator())));
         }
 
         LAST_MULTIPLAYER_STATE.put(uuid, currentMultiplayer);
@@ -179,7 +179,7 @@ public class PlayerEventHandler {
         player.sendSystemMessage(Component.translatable("narrator.join.title"));
 
         if (data.isMultiplayer()) {
-            player.sendSystemMessage(Component.translatable("narrator.join.subtitle", Component.translatable("narrator." + data.getMultiplayerNarrator().toLowerCase() + ".name")));
+            player.sendSystemMessage(Component.translatable("narrator.join.subtitle", Component.literal(data.getMultiplayerNarrator())));
         } else {
             String narratorKey = data.getNarratorType().getDisplayName().toLowerCase();
             player.sendSystemMessage(Component.translatable("narrator.join.subtitle", Component.translatable("narrator." + narratorKey + ".name")));

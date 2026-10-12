@@ -56,23 +56,31 @@ public class NarratorManager {
     private static void sendNarratorMessage(ServerPlayer player, String category) {
         WorldNarratorData data = WorldNarratorData.get((ServerLevel) player.level());
         String messageKey;
+        String narratorName;
 
         if (data.isMultiplayer()) {
-            String narratorName = data.getMultiplayerNarrator();
+            narratorName = data.getMultiplayerNarrator();
             messageKey = NarratorMessages.getMultiplayerMessage(category, narratorName);
         } else {
             NarratorType type = data.getNarratorType();
+            narratorName = type.getDisplayName();
             messageKey = NarratorMessages.getMessage(type, category);
         }
 
         if (messageKey != null && !messageKey.isEmpty()) {
-            String narratorNameKey = data.isMultiplayer() ? "narrator." + data.getMultiplayerNarrator().toLowerCase() + ".name" : "narrator." + data.getNarratorType().getDisplayName().toLowerCase() + ".name";
-            sendTitleMessage(player, narratorNameKey, messageKey);
+            sendTitleMessage(player, narratorName, messageKey, data.isMultiplayer());
         }
     }
 
-    private static void sendTitleMessage(ServerPlayer player, String narratorNameKey, String messageKey) {
-        ClientboundSetTitleTextPacket titlePacket = new ClientboundSetTitleTextPacket(Component.translatable(narratorNameKey).withStyle(style -> style.withColor(0xFF5555)));
+    private static void sendTitleMessage(ServerPlayer player, String narratorName, String messageKey, boolean isMultiplayer) {
+        Component titleComponent;
+        if (isMultiplayer) {
+            titleComponent = Component.literal(narratorName).withStyle(style -> style.withColor(0xFF5555));
+        } else {
+            titleComponent = Component.translatable("narrator." + narratorName.toLowerCase() + ".name").withStyle(style -> style.withColor(0xFF5555));
+        }
+
+        ClientboundSetTitleTextPacket titlePacket = new ClientboundSetTitleTextPacket(titleComponent);
         ClientboundSetSubtitleTextPacket subtitlePacket = new ClientboundSetSubtitleTextPacket(Component.translatable(messageKey).withStyle(style -> style.withColor(0xFFFFFF)));
         ClientboundSetTitlesAnimationPacket animationPacket = new ClientboundSetTitlesAnimationPacket(10, 60, 10);
 
