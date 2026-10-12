@@ -118,7 +118,7 @@ public class NarratorManager {
 
         String displayName;
         if (isHerobrine) {
-            displayName = convertToGalactic(narratorName);
+            displayName = narratorName;
         } else if (isMultiplayer) {
             displayName = narratorName;
         } else {
@@ -137,11 +137,64 @@ public class NarratorManager {
             mc.player.playNotifySound(SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.AMBIENT, 0.5f, 1.0f);
         }
 
+        if (isHerobrine) {
+            SCHEDULER.schedule(() -> {
+                Minecraft.getInstance().execute(() -> {
+                    animateHerobrineName(player, narratorName, messageKey);
+                });
+            }, 1000, TimeUnit.MILLISECONDS);
+        } else {
+            SCHEDULER.schedule(() -> {
+                Minecraft.getInstance().execute(() -> {
+                    showTitleMessage(player, narratorName, messageKey, isMultiplayer, isHerobrine);
+                });
+            }, 1500, TimeUnit.MILLISECONDS);
+        }
+    }
+
+    private static void animateHerobrineName(LocalPlayer player, String narratorName, String messageKey) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.gui == null) return;
+
+        String galacticName = convertToGalactic(narratorName);
+        int color = 0xAA00AA;
+
+        for (int i = 0; i <= galacticName.length(); i++) {
+            final int index = i;
+            SCHEDULER.schedule(() -> {
+                Minecraft.getInstance().execute(() -> {
+                    if (mc.gui == null) return;
+                    String partialName = galacticName.substring(0, index);
+                    mc.gui.setTitle(Component.literal(partialName).withStyle(style -> style.withColor(color)));
+                    mc.gui.setSubtitle(Component.literal("..."));
+                    mc.gui.setTimes(0, 10, 0);
+                });
+            }, i * 100, TimeUnit.MILLISECONDS);
+        }
+
         SCHEDULER.schedule(() -> {
             Minecraft.getInstance().execute(() -> {
-                showTitleMessage(player, narratorName, messageKey, isMultiplayer, isHerobrine);
+                showHerobrineMessage(player, narratorName, messageKey);
             });
-        }, 1500, TimeUnit.MILLISECONDS);
+        }, galacticName.length() * 100 + 500, TimeUnit.MILLISECONDS);
+    }
+
+    private static void showHerobrineMessage(LocalPlayer player, String narratorName, String messageKey) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.gui == null) return;
+
+        String galacticName = convertToGalactic(narratorName);
+        String translatedMsg = I18n.get(messageKey);
+        String galacticMsg = convertToGalactic(translatedMsg);
+        String limitedMsg = limitTextWidth(mc, galacticMsg);
+
+        mc.gui.setTitle(Component.literal(galacticName).withStyle(style -> style.withColor(0xAA00AA)));
+        mc.gui.setSubtitle(Component.literal(limitedMsg).withStyle(style -> style.withColor(0xAA00AA)));
+        mc.gui.setTimes(10, 60, 10);
+
+        if (mc.player != null) {
+            mc.player.playNotifySound(SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.AMBIENT, 0.5f, 1.0f);
+        }
     }
 
     private static void showTitleMessage(LocalPlayer player, String narratorName, String messageKey, boolean isMultiplayer, boolean isHerobrine) {
