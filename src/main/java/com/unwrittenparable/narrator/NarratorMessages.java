@@ -11,240 +11,240 @@ public class NarratorMessages {
         // Stanley
         Map<String, List<String>> stanley = new HashMap<>();
         stanley.put("block_break", Arrays.asList(
-                "Stanley broke a block. How productive.",
-                "Another block gone. Stanley's making progress... probably.",
-                "Breaking blocks. That's what Stanley does best.",
-                "The block didn't stand a chance against Stanley."
+                "narrator.stanley.block_break.1",
+                "narrator.stanley.block_break.2",
+                "narrator.stanley.block_break.3",
+                "narrator.stanley.block_break.4"
         ));
         stanley.put("biome_enter", Arrays.asList(
-                "Stanley walked into a new biome. How adventurous.",
-                "The scenery changed. Stanley didn't seem to notice.",
-                "A new biome. Stanley wondered if this one would be different.",
-                "The biome shifted. Stanley continued walking."
+                "narrator.stanley.biome_enter.1",
+                "narrator.stanley.biome_enter.2",
+                "narrator.stanley.biome_enter.3",
+                "narrator.stanley.biome_enter.4"
         ));
         stanley.put("death", Arrays.asList(
-                "Stanley died. This was not part of the plan.",
-                "And so Stanley's journey came to an abrupt end.",
-                "Death found Stanley. Stanley did not appreciate this.",
-                "The narrator watched Stanley die. The narrator felt nothing."
+                "narrator.stanley.death.1",
+                "narrator.stanley.death.2",
+                "narrator.stanley.death.3",
+                "narrator.stanley.death.4"
         ));
         stanley.put("combat", Arrays.asList(
-                "Stanley was fighting for his life.",
-                "The creature attacked. Stanley defended. It was chaos.",
-                "Combat. Stanley was not prepared for this."
+                "narrator.stanley.combat.1",
+                "narrator.stanley.combat.2",
+                "narrator.stanley.combat.3"
         ));
         stanley.put("idle", Arrays.asList(
-                "Stanley stood still. The narrator waited.",
-                "Nothing happened. The narrator grew impatient.",
-                "Stanley wasn't doing anything. This was boring.",
-                "The silence was deafening. Stanley did nothing."
+                "narrator.stanley.idle.1",
+                "narrator.stanley.idle.2",
+                "narrator.stanley.idle.3",
+                "narrator.stanley.idle.4"
         ));
         stanley.put("achievement", Arrays.asList(
-                "Stanley achieved something. The narrator took notes.",
-                "An achievement. Stanley was making progress after all.",
-                "The narrator acknowledged Stanley's accomplishment. Briefly.",
-                "Stanley earned an achievement. How industrious."
+                "narrator.stanley.achievement.1",
+                "narrator.stanley.achievement.2",
+                "narrator.stanley.achievement.3",
+                "narrator.stanley.achievement.4"
         ));
         MESSAGES.put(NarratorType.STANLEY, stanley);
 
-        // Helpful Narrator
-        Map<String, List<String>> helpful = new HashMap<>();
-        helpful.put("block_break", Arrays.asList(
-                "Good job! You broke a block. Keep going!",
-                "That block was in your way. Problem solved!",
-                "Mining is a noble profession. Keep at it!",
-                "Every block broken is progress made!"
+        // Nigel (Helpful)
+        Map<String, List<String>> nigel = new HashMap<>();
+        nigel.put("block_break", Arrays.asList(
+                "narrator.nigel.block_break.1",
+                "narrator.nigel.block_break.2",
+                "narrator.nigel.block_break.3",
+                "narrator.nigel.block_break.4"
         ));
-        helpful.put("biome_enter", Arrays.asList(
-                "Oh, a new biome! Look around, there might be resources here!",
-                "You've entered a new area. Explore carefully!",
-                "New biome detected. Adventure awaits!",
-                "The scenery changed! This could be exciting!"
+        nigel.put("biome_enter", Arrays.asList(
+                "narrator.nigel.biome_enter.1",
+                "narrator.nigel.biome_enter.2",
+                "narrator.nigel.biome_enter.3",
+                "narrator.nigel.biome_enter.4"
         ));
-        helpful.put("death", Arrays.asList(
-                "Oh no! Don't worry, we'll try again!",
-                "That didn't go as planned. Let's learn from this!",
-                "Everyone dies sometimes. It's part of the journey!",
-                "Unfortunate. But every failure is a lesson!"
+        nigel.put("death", Arrays.asList(
+                "narrator.nigel.death.1",
+                "narrator.nigel.death.2",
+                "narrator.nigel.death.3",
+                "narrator.nigel.death.4"
         ));
-        helpful.put("combat", Arrays.asList(
-                "Fight bravely! You've got this!",
-                "Combat time! Remember to dodge!",
-                "Watch your health! Be careful!"
+        nigel.put("combat", Arrays.asList(
+                "narrator.nigel.combat.1",
+                "narrator.nigel.combat.2",
+                "narrator.nigel.combat.3"
         ));
-        helpful.put("idle", Arrays.asList(
-                "Are you okay? You seem to be standing still.",
-                "Take your time. No rush!",
-                "Resting is important too!",
-                "Whenever you're ready, adventure awaits!"
+        nigel.put("idle", Arrays.asList(
+                "narrator.nigel.idle.1",
+                "narrator.nigel.idle.2",
+                "narrator.nigel.idle.3",
+                "narrator.nigel.idle.4"
         ));
-        helpful.put("achievement", Arrays.asList(
-                "An achievement! You earned it!",
-                "Well done! That's a great accomplishment!",
-                "You did it! I'm so proud of you!",
-                "Achievement unlocked! Keep up the great work!"
+        nigel.put("achievement", Arrays.asList(
+                "narrator.nigel.achievement.1",
+                "narrator.nigel.achievement.2",
+                "narrator.nigel.achievement.3",
+                "narrator.nigel.achievement.4"
         ));
-        MESSAGES.put(NarratorType.HELPFUL, helpful);
+        MESSAGES.put(NarratorType.HELPFUL, nigel);
 
-        // Sarcastic Narrator
-        Map<String, List<String>> sarcastic = new HashMap<>();
-        sarcastic.put("block_break", Arrays.asList(
-                "Wow. You broke a block. Truly groundbreaking.",
-                "Another block destroyed. Your legacy grows.",
-                "Mining. How original.",
-                "The block is gone. Are you happy now?"
+        // Malcolm (Sarcastic)
+        Map<String, List<String>> malcolm = new HashMap<>();
+        malcolm.put("block_break", Arrays.asList(
+                "narrator.malcolm.block_break.1",
+                "narrator.malcolm.block_break.2",
+                "narrator.malcolm.block_break.3",
+                "narrator.malcolm.block_break.4"
         ));
-        sarcastic.put("biome_enter", Arrays.asList(
-                "Oh look, a new biome. I'm sure this one will be different.",
-                "The scenery changed. Riveting.",
-                "A new biome. Because the last one was boring, right?",
-                "Welcome to somewhere else. It's all the same really."
+        malcolm.put("biome_enter", Arrays.asList(
+                "narrator.malcolm.biome_enter.1",
+                "narrator.malcolm.biome_enter.2",
+                "narrator.malcolm.biome_enter.3",
+                "narrator.malcolm.biome_enter.4"
         ));
-        sarcastic.put("death", Arrays.asList(
-                "And there it is. I was wondering when that would happen.",
-                "Dead. Shocking. Truly unpredictable.",
-                "You died. The narrator is not surprised.",
-                "Death: the one thing you're consistent at."
+        malcolm.put("death", Arrays.asList(
+                "narrator.malcolm.death.1",
+                "narrator.malcolm.death.2",
+                "narrator.malcolm.death.3",
+                "narrator.malcolm.death.4"
         ));
-        sarcastic.put("combat", Arrays.asList(
-                "Oh, you're fighting. This should be entertaining.",
-                "Combat. Let's see how this goes.",
-                "A battle. How thrilling. I'll wait."
+        malcolm.put("combat", Arrays.asList(
+                "narrator.malcolm.combat.1",
+                "narrator.malcolm.combat.2",
+                "narrator.malcolm.combat.3"
         ));
-        sarcastic.put("idle", Arrays.asList(
-                "Standing still. Bold strategy.",
-                "Are you going to do something, or...?",
-                "The narrator waits. And waits. And waits.",
-                "Idle. Just like your ambitions."
+        malcolm.put("idle", Arrays.asList(
+                "narrator.malcolm.idle.1",
+                "narrator.malcolm.idle.2",
+                "narrator.malcolm.idle.3",
+                "narrator.malcolm.idle.4"
         ));
-        sarcastic.put("achievement", Arrays.asList(
-                "An achievement. I suppose that's something.",
-                "You got an achievement. Do you want a medal?",
-                "Achievement unlocked. The narrator is underwhelmed.",
-                "Congratulations on your achievement. Truly."
+        malcolm.put("achievement", Arrays.asList(
+                "narrator.malcolm.achievement.1",
+                "narrator.malcolm.achievement.2",
+                "narrator.malcolm.achievement.3",
+                "narrator.malcolm.achievement.4"
         ));
-        MESSAGES.put(NarratorType.SARCASTIC, sarcastic);
+        MESSAGES.put(NarratorType.SARCASTIC, malcolm);
 
-        // Dark Narrator
-        Map<String, List<String>> dark = new HashMap<>();
-        dark.put("block_break", Arrays.asList(
-                "The block crumbled. Like everything else.",
-                "Destruction. It's all you know.",
-                "Another piece of the world, gone forever.",
-                "The earth weeps as you tear it apart."
+        // Edgar (Dark)
+        Map<String, List<String>> edgar = new HashMap<>();
+        edgar.put("block_break", Arrays.asList(
+                "narrator.edgar.block_break.1",
+                "narrator.edgar.block_break.2",
+                "narrator.edgar.block_break.3",
+                "narrator.edgar.block_break.4"
         ));
-        dark.put("biome_enter", Arrays.asList(
-                "You've entered a place of shadows. Be wary.",
-                "The biome shifted. Something watches here.",
-                "New territory. The darkness grows.",
-                "The land changed. It remembers you."
+        edgar.put("biome_enter", Arrays.asList(
+                "narrator.edgar.biome_enter.1",
+                "narrator.edgar.biome_enter.2",
+                "narrator.edgar.biome_enter.3",
+                "narrator.edgar.biome_enter.4"
         ));
-        dark.put("death", Arrays.asList(
-                "Death comes for us all. Today it came for you.",
-                "The end. As it was always going to be.",
-                "You fell. The darkness is patient.",
-                "Another soul claimed. The cycle continues."
+        edgar.put("death", Arrays.asList(
+                "narrator.edgar.death.1",
+                "narrator.edgar.death.2",
+                "narrator.edgar.death.3",
+                "narrator.edgar.death.4"
         ));
-        dark.put("combat", Arrays.asList(
-                "Blood will be spilled. It is inevitable.",
-                "The creatures hunger. They always do.",
-                "Fight if you wish. It changes nothing."
+        edgar.put("combat", Arrays.asList(
+                "narrator.edgar.combat.1",
+                "narrator.edgar.combat.2",
+                "narrator.edgar.combat.3"
         ));
-        dark.put("idle", Arrays.asList(
-                "Silence. The darkness gathers.",
-                "You stand still. It watches.",
-                "The stillness is deafening. Something approaches.",
-                "Idle hands. The devil's workshop."
+        edgar.put("idle", Arrays.asList(
+                "narrator.edgar.idle.1",
+                "narrator.edgar.idle.2",
+                "narrator.edgar.idle.3",
+                "narrator.edgar.idle.4"
         ));
-        dark.put("achievement", Arrays.asList(
-                "An achievement. The darkness takes notice.",
-                "You earned something. But at what cost?",
-                "Achievement unlocked. The shadows grow longer.",
-                "A accomplishment. The void acknowledges you."
+        edgar.put("achievement", Arrays.asList(
+                "narrator.edgar.achievement.1",
+                "narrator.edgar.achievement.2",
+                "narrator.edgar.achievement.3",
+                "narrator.edgar.achievement.4"
         ));
-        MESSAGES.put(NarratorType.DARK, dark);
+        MESSAGES.put(NarratorType.DARK, edgar);
 
-        // Optimistic Narrator
-        Map<String, List<String>> optimistic = new HashMap<>();
-        optimistic.put("block_break", Arrays.asList(
-                "You broke a block! That's the spirit!",
-                "Mining away! What a beautiful day!",
-                "Another block! You're doing amazing!",
-                "Blocks are meant to be broken! Keep going!"
+        // Chester (Optimistic)
+        Map<String, List<String>> chester = new HashMap<>();
+        chester.put("block_break", Arrays.asList(
+                "narrator.chester.block_break.1",
+                "narrator.chester.block_break.2",
+                "narrator.chester.block_break.3",
+                "narrator.chester.block_break.4"
         ));
-        optimistic.put("biome_enter", Arrays.asList(
-                "A new biome! Isn't nature wonderful?!",
-                "Look at this beautiful place! Everything is amazing!",
-                "New adventures! New possibilities! Life is good!",
-                "The world is full of wonders! Explore them all!"
+        chester.put("biome_enter", Arrays.asList(
+                "narrator.chester.biome_enter.1",
+                "narrator.chester.biome_enter.2",
+                "narrator.chester.biome_enter.3",
+                "narrator.chester.biome_enter.4"
         ));
-        optimistic.put("death", Arrays.asList(
-                "You died! But hey, at least you tried!",
-                "Death is just a new beginning! How exciting!",
-                "Oops! Well, nobody's perfect! Let's go again!",
-                "You fell! But the important thing is you had fun!"
+        chester.put("death", Arrays.asList(
+                "narrator.chester.death.1",
+                "narrator.chester.death.2",
+                "narrator.chester.death.3",
+                "narrator.chester.death.4"
         ));
-        optimistic.put("combat", Arrays.asList(
-                "A battle! What an exciting opportunity!",
-                "Fight with joy in your heart!",
-                "Combat! Every moment is a gift!"
+        chester.put("combat", Arrays.asList(
+                "narrator.chester.combat.1",
+                "narrator.chester.combat.2",
+                "narrator.chester.combat.3"
         ));
-        optimistic.put("idle", Arrays.asList(
-                "Resting! Good for you! Self-care is important!",
-                "Taking a moment! How peaceful!",
-                "Standing still! Enjoying the view!",
-                "Life is beautiful! Even when you're doing nothing!"
+        chester.put("idle", Arrays.asList(
+                "narrator.chester.idle.1",
+                "narrator.chester.idle.2",
+                "narrator.chester.idle.3",
+                "narrator.chester.idle.4"
         ));
-        optimistic.put("achievement", Arrays.asList(
-                "AN ACHIEVEMENT! THIS IS THE BEST DAY EVER!",
-                "YOU DID IT! I KNEW YOU COULD!",
-                "ACHIEVEMENT UNLOCKED! YOU'RE AMAZING!",
-                "WOW! AN ACHIEVEMENT! I'M SO HAPPY FOR YOU!"
+        chester.put("achievement", Arrays.asList(
+                "narrator.chester.achievement.1",
+                "narrator.chester.achievement.2",
+                "narrator.chester.achievement.3",
+                "narrator.chester.achievement.4"
         ));
-        MESSAGES.put(NarratorType.OPTIMISTIC, optimistic);
+        MESSAGES.put(NarratorType.OPTIMISTIC, chester);
 
-        // Narcissistic Narrator
-        Map<String, List<String>> narcissistic = new HashMap<>();
-        narcissistic.put("block_break", Arrays.asList(
-                "I told you to break that block. You're welcome.",
-                "Another block broken, thanks to my guidance.",
-                "You broke a block. I deserve credit for this.",
-                "Mining. I would've done it better, but still."
+        // Reginald (Narcissistic)
+        Map<String, List<String>> reginald = new HashMap<>();
+        reginald.put("block_break", Arrays.asList(
+                "narrator.reginald.block_break.1",
+                "narrator.reginald.block_break.2",
+                "narrator.reginald.block_break.3",
+                "narrator.reginald.block_break.4"
         ));
-        narcissistic.put("biome_enter", Arrays.asList(
-                "I chose this biome for you. You should be grateful.",
-                "A new biome. I planned this all along.",
-                "Welcome to my masterpiece. Look around.",
-                "The biome changed. I made that happen."
+        reginald.put("biome_enter", Arrays.asList(
+                "narrator.reginald.biome_enter.1",
+                "narrator.reginald.biome_enter.2",
+                "narrator.reginald.biome_enter.3",
+                "narrator.reginald.biome_enter.4"
         ));
-        narcissistic.put("death", Arrays.asList(
-                "You died. I would never.",
-                "Death? How embarrassing. I'm immortal.",
-                "You fell. I could've prevented that. I chose not to.",
-                "Dead. The narrator remains superior."
+        reginald.put("death", Arrays.asList(
+                "narrator.reginald.death.1",
+                "narrator.reginald.death.2",
+                "narrator.reginald.death.3",
+                "narrator.reginald.death.4"
         ));
-        narcissistic.put("combat", Arrays.asList(
-                "Fight well. I'm watching. Taking notes.",
-                "Combat. I could win this in my sleep.",
-                "Show me what you've learned from me.",
-                "Battle. I've seen better. But try."
+        reginald.put("combat", Arrays.asList(
+                "narrator.reginald.combat.1",
+                "narrator.reginald.combat.2",
+                "narrator.reginald.combat.3",
+                "narrator.reginald.combat.4"
         ));
-        narcissistic.put("idle", Arrays.asList(
-                "Standing still. Waiting for my next brilliant instruction.",
-                "Idle. Even I need a break from being perfect.",
-                "Nothing happens. The narrator is still the best.",
-                "Waiting. I have all the time in the world."
+        reginald.put("idle", Arrays.asList(
+                "narrator.reginald.idle.1",
+                "narrator.reginald.idle.2",
+                "narrator.reginald.idle.3",
+                "narrator.reginald.idle.4"
         ));
-        narcissistic.put("achievement", Arrays.asList(
-                "An achievement. I taught you everything you know.",
-                "You earned something. I deserve the credit.",
-                "Achievement unlocked. My guidance paid off.",
-                "Congratulations to me for your achievement."
+        reginald.put("achievement", Arrays.asList(
+                "narrator.reginald.achievement.1",
+                "narrator.reginald.achievement.2",
+                "narrator.reginald.achievement.3",
+                "narrator.reginald.achievement.4"
         ));
-        MESSAGES.put(NarratorType.NARCISSISTIC, narcissistic);
+        MESSAGES.put(NarratorType.NARCISSISTIC, reginald);
     }
 
-    public static String getMessage(NarratorType type, String category) {
+    public static String getMessageKey(NarratorType type, String category) {
         Map<String, List<String>> narratorMessages = MESSAGES.get(type);
         if (narratorMessages == null) return "";
 
@@ -254,50 +254,58 @@ public class NarratorMessages {
         return messages.get(RANDOM.nextInt(messages.size()));
     }
 
-    public static String getMultiplayerMessage(String category, String narratorName) {
+    public static String getMultiplayerMessageKey(String category, String narratorName) {
         List<String> messages = new ArrayList<>();
 
         switch (category) {
             case "block_break":
-                messages.add(narratorName + " watches you mine.");
-                messages.add(narratorName + " approves of your mining.");
-                messages.add(narratorName + " notes your progress.");
-                messages.add(narratorName + " observes silently.");
+                messages.add("narrator." + narratorName.toLowerCase() + ".block_break.1");
+                messages.add("narrator." + narratorName.toLowerCase() + ".block_break.2");
+                messages.add("narrator." + narratorName.toLowerCase() + ".block_break.3");
+                messages.add("narrator." + narratorName.toLowerCase() + ".block_break.4");
                 break;
             case "biome_enter":
-                messages.add(narratorName + " knows this place.");
-                messages.add(narratorName + " has been here before.");
-                messages.add(narratorName + " watches from the shadows.");
-                messages.add(narratorName + " follows you.");
+                messages.add("narrator." + narratorName.toLowerCase() + ".biome_enter.1");
+                messages.add("narrator." + narratorName.toLowerCase() + ".biome_enter.2");
+                messages.add("narrator." + narratorName.toLowerCase() + ".biome_enter.3");
+                messages.add("narrator." + narratorName.toLowerCase() + ".biome_enter.4");
                 break;
             case "death":
-                messages.add(narratorName + " is not surprised.");
-                messages.add(narratorName + " saw that coming.");
-                messages.add(narratorName + " does not mourn.");
-                messages.add(narratorName + " watches you fall.");
+                messages.add("narrator." + narratorName.toLowerCase() + ".death.1");
+                messages.add("narrator." + narratorName.toLowerCase() + ".death.2");
+                messages.add("narrator." + narratorName.toLowerCase() + ".death.3");
+                messages.add("narrator." + narratorName.toLowerCase() + ".death.4");
                 break;
             case "combat":
-                messages.add(narratorName + " watches the battle.");
-                messages.add(narratorName + " is entertained.");
-                messages.add(narratorName + " waits patiently.");
+                messages.add("narrator." + narratorName.toLowerCase() + ".combat.1");
+                messages.add("narrator." + narratorName.toLowerCase() + ".combat.2");
+                messages.add("narrator." + narratorName.toLowerCase() + ".combat.3");
                 break;
             case "idle":
-                messages.add(narratorName + " is waiting.");
-                messages.add(narratorName + " grows impatient.");
-                messages.add(narratorName + " watches you do nothing.");
-                messages.add(narratorName + " observes the silence.");
+                messages.add("narrator." + narratorName.toLowerCase() + ".idle.1");
+                messages.add("narrator." + narratorName.toLowerCase() + ".idle.2");
+                messages.add("narrator." + narratorName.toLowerCase() + ".idle.3");
+                messages.add("narrator." + narratorName.toLowerCase() + ".idle.4");
                 break;
             case "achievement":
-                messages.add(narratorName + " acknowledges your achievement.");
-                messages.add(narratorName + " watched you succeed.");
-                messages.add(narratorName + " notes your progress.");
-                messages.add(narratorName + " sees your accomplishment.");
+                messages.add("narrator." + narratorName.toLowerCase() + ".achievement.1");
+                messages.add("narrator." + narratorName.toLowerCase() + ".achievement.2");
+                messages.add("narrator." + narratorName.toLowerCase() + ".achievement.3");
+                messages.add("narrator." + narratorName.toLowerCase() + ".achievement.4");
                 break;
             default:
-                messages.add(narratorName + " speaks.");
+                messages.add("narrator." + narratorName.toLowerCase() + ".idle.1");
                 break;
         }
 
         return messages.get(RANDOM.nextInt(messages.size()));
+    }
+
+    public static String getMessage(NarratorType type, String category) {
+        return getMessageKey(type, category);
+    }
+
+    public static String getMultiplayerMessage(String category, String narratorName) {
+        return getMultiplayerMessageKey(category, narratorName);
     }
 }

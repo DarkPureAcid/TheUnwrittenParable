@@ -158,13 +158,14 @@ public class PlayerEventHandler {
     }
 
     private void showAssignedNarrator(ServerPlayer player, WorldNarratorData data) {
-        player.sendSystemMessage(Component.literal("=== The Unwritten Parable ==="));
+        player.sendSystemMessage(Component.translatable("narrator.join.title"));
 
         if (data.isMultiplayer()) {
-            player.sendSystemMessage(Component.literal("Your narrator is: " + data.getMultiplayerNarrator()));
+            player.sendSystemMessage(Component.translatable("narrator.join.subtitle", Component.translatable("narrator." + data.getMultiplayerNarrator().toLowerCase() + ".name")));
         } else {
-            player.sendSystemMessage(Component.literal("Your narrator is: " + data.getNarratorType().getDisplayName()));
-            player.sendSystemMessage(Component.literal("\"" + data.getNarratorType().getDescription() + "\""));
+            String narratorKey = data.getNarratorType().getDisplayName().toLowerCase();
+            player.sendSystemMessage(Component.translatable("narrator.join.subtitle", Component.translatable("narrator." + narratorKey + ".name")));
+            player.sendSystemMessage(Component.translatable("narrator." + narratorKey + ".desc"));
         }
     }
 }

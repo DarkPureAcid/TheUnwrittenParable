@@ -36,14 +36,15 @@ public class NarratorCommand {
         ServerLevel level = player.serverLevel();
         WorldNarratorData data = WorldNarratorData.get(level);
 
-        player.sendSystemMessage(Component.literal("=== Narrator Info ==="));
+        player.sendSystemMessage(Component.translatable("commands.narrator.info"));
         if (data.isMultiplayer()) {
-            player.sendSystemMessage(Component.literal("Mode: Multiplayer"));
-            player.sendSystemMessage(Component.literal("Narrator: " + data.getMultiplayerNarrator()));
+            player.sendSystemMessage(Component.translatable("commands.narrator.mode_multiplayer"));
+            player.sendSystemMessage(Component.translatable("commands.narrator.narrator", Component.translatable("narrator." + data.getMultiplayerNarrator().toLowerCase() + ".name")));
         } else {
-            player.sendSystemMessage(Component.literal("Mode: Singleplayer"));
-            player.sendSystemMessage(Component.literal("Narrator: " + data.getNarratorType().getDisplayName()));
-            player.sendSystemMessage(Component.literal("Personality: " + data.getNarratorType().getDescription()));
+            String narratorKey = data.getNarratorType().getDisplayName().toLowerCase();
+            player.sendSystemMessage(Component.translatable("commands.narrator.mode_singleplayer"));
+            player.sendSystemMessage(Component.translatable("commands.narrator.narrator", Component.translatable("narrator." + narratorKey + ".name")));
+            player.sendSystemMessage(Component.translatable("commands.narrator.personality", Component.translatable("narrator." + narratorKey + ".desc")));
         }
 
         return 1;
@@ -56,7 +57,7 @@ public class NarratorCommand {
         String[] categories = {"block_break", "biome_enter", "death", "combat", "idle", "achievement"};
 
         if (categoryIndex < 1 || categoryIndex > categories.length) {
-            player.sendSystemMessage(Component.literal("Invalid category. Use 1-6."));
+            player.sendSystemMessage(Component.translatable("commands.narrator.invalid_category"));
             return 0;
         }
 
@@ -71,7 +72,7 @@ public class NarratorCommand {
         String[] categories = {"block_break", "biome_enter", "death", "combat", "idle", "achievement"};
 
         if (categoryIndex < 1 || categoryIndex > categories.length) {
-            player.sendSystemMessage(Component.literal("Invalid category. Use 1-6."));
+            player.sendSystemMessage(Component.translatable("commands.narrator.invalid_category"));
             return 0;
         }
 
@@ -82,12 +83,11 @@ public class NarratorCommand {
     private static int showHelp(CommandContext<CommandSourceStack> context) {
         if (!(context.getSource().getEntity() instanceof ServerPlayer player)) return 0;
 
-        player.sendSystemMessage(Component.literal("=== The Unwritten Parable Commands ==="));
-        player.sendSystemMessage(Component.literal("/narrator info - Show current narrator settings"));
-        player.sendSystemMessage(Component.literal("/narrator test <1-6> - Test a narrator message (respects cooldown)"));
-        player.sendSystemMessage(Component.literal("/narrator broadcast <1-6> - Broadcast narrator message (bypasses cooldown)"));
-        player.sendSystemMessage(Component.literal("  1: block_break, 2: biome_enter, 3: death, 4: combat, 5: idle, 6: achievement"));
-        player.sendSystemMessage(Component.literal("/narrator help - Show this help"));
+        player.sendSystemMessage(Component.translatable("commands.narrator.help"));
+        player.sendSystemMessage(Component.translatable("commands.narrator.help_info"));
+        player.sendSystemMessage(Component.translatable("commands.narrator.help_test"));
+        player.sendSystemMessage(Component.translatable("commands.narrator.help_broadcast"));
+        player.sendSystemMessage(Component.translatable("commands.narrator.help_categories"));
 
         return 1;
     }

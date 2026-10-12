@@ -55,25 +55,25 @@ public class NarratorManager {
 
     private static void sendNarratorMessage(ServerPlayer player, String category) {
         WorldNarratorData data = WorldNarratorData.get((ServerLevel) player.level());
-        String message;
+        String messageKey;
 
         if (data.isMultiplayer()) {
             String narratorName = data.getMultiplayerNarrator();
-            message = NarratorMessages.getMultiplayerMessage(category, narratorName);
+            messageKey = NarratorMessages.getMultiplayerMessage(category, narratorName);
         } else {
             NarratorType type = data.getNarratorType();
-            message = NarratorMessages.getMessage(type, category);
+            messageKey = NarratorMessages.getMessage(type, category);
         }
 
-        if (message != null && !message.isEmpty()) {
-            String narratorName = data.isMultiplayer() ? data.getMultiplayerNarrator() : data.getNarratorType().getDisplayName();
-            sendTitleMessage(player, narratorName, message);
+        if (messageKey != null && !messageKey.isEmpty()) {
+            String narratorNameKey = data.isMultiplayer() ? "narrator." + data.getMultiplayerNarrator().toLowerCase() + ".name" : "narrator." + data.getNarratorType().getDisplayName().toLowerCase() + ".name";
+            sendTitleMessage(player, narratorNameKey, messageKey);
         }
     }
 
-    private static void sendTitleMessage(ServerPlayer player, String narratorName, String message) {
-        ClientboundSetTitleTextPacket titlePacket = new ClientboundSetTitleTextPacket(Component.literal("§c" + narratorName));
-        ClientboundSetSubtitleTextPacket subtitlePacket = new ClientboundSetSubtitleTextPacket(Component.literal("§f" + message));
+    private static void sendTitleMessage(ServerPlayer player, String narratorNameKey, String messageKey) {
+        ClientboundSetTitleTextPacket titlePacket = new ClientboundSetTitleTextPacket(Component.translatable(narratorNameKey).withStyle(style -> style.withColor(0xFF5555)));
+        ClientboundSetSubtitleTextPacket subtitlePacket = new ClientboundSetSubtitleTextPacket(Component.translatable(messageKey).withStyle(style -> style.withColor(0xFFFFFF)));
         ClientboundSetTitlesAnimationPacket animationPacket = new ClientboundSetTitlesAnimationPacket(10, 60, 10);
 
         player.connection.send(titlePacket);
