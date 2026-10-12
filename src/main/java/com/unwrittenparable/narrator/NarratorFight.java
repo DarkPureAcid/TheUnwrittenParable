@@ -64,7 +64,7 @@ public class NarratorFight {
             String fighter = fighters[i % 2];
             String messageKey = FIGHT_MESSAGES[i];
 
-            String translatedMsg = I18n.get(messageKey, fighter, narrator1, narrator2);
+            String translatedMsg = I18n.get(messageKey, fighter);
 
             if (i == 0 || i == FIGHT_MESSAGES.length - 1) {
                 showFightTitle(player, fighter, translatedMsg, true);
@@ -84,7 +84,15 @@ public class NarratorFight {
             Thread.sleep(delay);
         }
 
-        String winner = random.nextBoolean() ? narrator1 : narrator2;
+        boolean chuckNorrisWins = random.nextBoolean();
+        String winner;
+
+        if (narrator1.equals("Chuck Norris") || narrator2.equals("Chuck Norris")) {
+            winner = chuckNorrisWins ? "Chuck Norris" : (narrator1.equals("Chuck Norris") ? narrator2 : narrator1);
+        } else {
+            winner = random.nextBoolean() ? narrator1 : narrator2;
+        }
+
         String winMessage = I18n.get("narrator.fight.winner", winner);
         showFightTitle(player, winner, winMessage, true);
 

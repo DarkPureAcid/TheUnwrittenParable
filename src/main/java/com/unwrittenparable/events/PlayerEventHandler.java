@@ -14,6 +14,7 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
+import net.minecraftforge.event.CommandEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -105,6 +106,25 @@ public class PlayerEventHandler {
         if (hasDisplay) {
             NarratorManager.broadcastMessage(player, "achievement");
         }
+    }
+
+    @SubscribeEvent
+    public void onCommand(CommandEvent event) {
+        String command = event.getParseResults().getReader().getString();
+        TheUnwrittenParable.LOGGER.info("CommandEvent fired: " + command);
+
+        Minecraft.getInstance().execute(() -> {
+            LocalPlayer player = Minecraft.getInstance().player;
+            if (player == null) return;
+
+            if (command.startsWith("/")) {
+                String reactionKey = CommandReactions.getReaction(command);
+                TheUnwrittenParable.LOGGER.info("Command: " + command + " -> Reaction: " + reactionKey);
+                if (reactionKey != null) {
+                    NarratorManager.broadcastMessage(player, reactionKey);
+                }
+            }
+        });
     }
 
     private void checkBiomeChange(LocalPlayer player) {
