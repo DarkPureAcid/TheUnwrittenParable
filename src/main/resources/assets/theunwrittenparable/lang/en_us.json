@@ -243,5 +243,6 @@
 
   "narrator.join.title": "The Unwritten Parable",
   "narrator.join.subtitle": "Your narrator is: %s",
-  "narrator.lan.taken_over": "Narrator taken over by %s"
+  "narrator.lan.taken_over": "Narrator taken over by %s",
+  "narrator.herobrine.found": "herobrine.EXE has been found"
 }

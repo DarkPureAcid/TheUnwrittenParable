@@ -152,7 +152,12 @@ public class PlayerEventHandler {
             data.setMultiplayer(true);
 
             String narratorName = data.getMultiplayerNarrator();
-            player.sendSystemMessage(Component.translatable("narrator.lan.taken_over", Component.literal(narratorName)));
+
+            if (narratorName.equals("Herobrine")) {
+                player.sendSystemMessage(Component.translatable("narrator.herobrine.found"));
+            } else {
+                player.sendSystemMessage(Component.translatable("narrator.lan.taken_over", Component.literal(narratorName)));
+            }
 
             NarratorManager.broadcastMessage(player, "biome_enter");
         }
