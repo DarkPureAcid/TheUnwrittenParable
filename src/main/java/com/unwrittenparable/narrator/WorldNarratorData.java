@@ -14,7 +14,7 @@ public class WorldNarratorData extends SavedData {
     private boolean isMultiplayer = false;
     private String multiplayerNarrator = "Herobrine";
 
-    private static final String[] MULTIPLAYER_NARRATORS = {"Herobrine", "Notch"};
+    private static final String[] MULTIPLAYER_NARRATORS = {"Notch", "Herobrine", "Chuck Norris"};
     private static final Random RANDOM = new Random();
 
     public WorldNarratorData() {
