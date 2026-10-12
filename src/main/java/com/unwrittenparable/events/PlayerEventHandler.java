@@ -138,11 +138,13 @@ public class PlayerEventHandler {
 
         String command = event.getParseResults().getReader().getString();
         TheUnwrittenParable.LOGGER.info("CommandEvent fired: " + command);
+        TheUnwrittenParable.LOGGER.info("CommandEvent thread: " + Thread.currentThread().getName());
 
         if (command.startsWith("/")) {
             String reactionKey = CommandReactions.getReaction(command);
+            TheUnwrittenParable.LOGGER.info("Reaction key: " + reactionKey);
             if (reactionKey != null) {
-                TheUnwrittenParable.LOGGER.info("Command reaction: " + reactionKey);
+                TheUnwrittenParable.LOGGER.info("Sending narrator message for command: " + command);
                 NarratorManager.broadcastMessage(player, reactionKey);
             }
         }
