@@ -2,7 +2,6 @@ package com.unwrittenparable.narrator;
 
 import com.unwrittenparable.config.ModConfig;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket;
@@ -15,8 +14,6 @@ public class NarratorManager {
     private static final Map<UUID, Long> LAST_MESSAGE_TIME = new HashMap<>();
     private static final Map<UUID, Boolean> IN_COMBAT = new HashMap<>();
     private static final Random RANDOM = new Random();
-
-    private static final Set<String> TITLE_CATEGORIES = new HashSet<>(Arrays.asList("death", "achievement"));
 
     public static void sendMessage(ServerPlayer player, String category) {
         if (!ModConfig.ENABLE_NARRATOR.get()) return;
@@ -70,19 +67,8 @@ public class NarratorManager {
 
         if (message != null && !message.isEmpty()) {
             String narratorName = data.isMultiplayer() ? data.getMultiplayerNarrator() : data.getNarratorType().getDisplayName();
-
-            if (TITLE_CATEGORIES.contains(category)) {
-                sendTitleMessage(player, narratorName, message);
-            } else {
-                sendActionBarMessage(player, narratorName, message);
-            }
+            sendTitleMessage(player, narratorName, message);
         }
-    }
-
-    private static void sendActionBarMessage(ServerPlayer player, String narratorName, String message) {
-        String formatted = "§e[" + narratorName + "]§f " + message;
-        ClientboundSetActionBarTextPacket packet = new ClientboundSetActionBarTextPacket(Component.literal(formatted));
-        player.connection.send(packet);
     }
 
     private static void sendTitleMessage(ServerPlayer player, String narratorName, String message) {

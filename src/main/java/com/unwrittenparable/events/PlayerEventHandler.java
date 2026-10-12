@@ -73,8 +73,8 @@ public class PlayerEventHandler {
         ServerLevel level = player.serverLevel();
         WorldNarratorData data = WorldNarratorData.get(level);
 
-        boolean isServer = !player.server.isSingleplayer();
-        data.setMultiplayer(isServer);
+        boolean isMultiplayer = !player.server.isSingleplayer() || player.server.isPublished();
+        data.setMultiplayer(isMultiplayer);
 
         showAssignedNarrator(player, data);
     }
