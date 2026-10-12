@@ -1,0 +1,27 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="MIT"
+
+[[mods]]
+modId="theunwrittenparable"
+version="1.0.0"
+displayName="The Unwritten Parable"
+description='''
+A Stanley Parable-inspired narrator mod for Minecraft.
+The narrator speaks through chat, commenting on your every move.
+Choose your narrator's personality when you start a new world.
+'''
+
+[[dependencies.theunwrittenparable]]
+modId="forge"
+mandatory=true
+versionRange="[47,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.theunwrittenparable]]
+modId="minecraft"
+mandatory=true
+versionRange="[1.20.1]"
+ordering="NONE"
+side="BOTH"
