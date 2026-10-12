@@ -39,6 +39,12 @@ public class NarratorMessages {
                 "Stanley wasn't doing anything. This was boring.",
                 "The silence was deafening. Stanley did nothing."
         ));
+        stanley.put("achievement", Arrays.asList(
+                "Stanley achieved something. The narrator took notes.",
+                "An achievement. Stanley was making progress after all.",
+                "The narrator acknowledged Stanley's accomplishment. Briefly.",
+                "Stanley earned an achievement. How industrious."
+        ));
         MESSAGES.put(NarratorType.STANLEY, stanley);
 
         // Helpful Narrator
@@ -71,6 +77,12 @@ public class NarratorMessages {
                 "Take your time. No rush!",
                 "Resting is important too!",
                 "Whenever you're ready, adventure awaits!"
+        ));
+        helpful.put("achievement", Arrays.asList(
+                "An achievement! You earned it!",
+                "Well done! That's a great accomplishment!",
+                "You did it! I'm so proud of you!",
+                "Achievement unlocked! Keep up the great work!"
         ));
         MESSAGES.put(NarratorType.HELPFUL, helpful);
 
@@ -105,6 +117,12 @@ public class NarratorMessages {
                 "The narrator waits. And waits. And waits.",
                 "Idle. Just like your ambitions."
         ));
+        sarcastic.put("achievement", Arrays.asList(
+                "An achievement. I suppose that's something.",
+                "You got an achievement. Do you want a medal?",
+                "Achievement unlocked. The narrator is underwhelmed.",
+                "Congratulations on your achievement. Truly."
+        ));
         MESSAGES.put(NarratorType.SARCASTIC, sarcastic);
 
         // Dark Narrator
@@ -137,6 +155,12 @@ public class NarratorMessages {
                 "You stand still. It watches.",
                 "The stillness is deafening. Something approaches.",
                 "Idle hands. The devil's workshop."
+        ));
+        dark.put("achievement", Arrays.asList(
+                "An achievement. The darkness takes notice.",
+                "You earned something. But at what cost?",
+                "Achievement unlocked. The shadows grow longer.",
+                "A accomplishment. The void acknowledges you."
         ));
         MESSAGES.put(NarratorType.DARK, dark);
 
@@ -171,6 +195,12 @@ public class NarratorMessages {
                 "Standing still! Enjoying the view!",
                 "Life is beautiful! Even when you're doing nothing!"
         ));
+        optimistic.put("achievement", Arrays.asList(
+                "AN ACHIEVEMENT! THIS IS THE BEST DAY EVER!",
+                "YOU DID IT! I KNEW YOU COULD!",
+                "ACHIEVEMENT UNLOCKED! YOU'RE AMAZING!",
+                "WOW! AN ACHIEVEMENT! I'M SO HAPPY FOR YOU!"
+        ));
         MESSAGES.put(NarratorType.OPTIMISTIC, optimistic);
 
         // Narcissistic Narrator
@@ -204,6 +234,12 @@ public class NarratorMessages {
                 "Idle. Even I need a break from being perfect.",
                 "Nothing happens. The narrator is still the best.",
                 "Waiting. I have all the time in the world."
+        ));
+        narcissistic.put("achievement", Arrays.asList(
+                "An achievement. I taught you everything you know.",
+                "You earned something. I deserve the credit.",
+                "Achievement unlocked. My guidance paid off.",
+                "Congratulations to me for your achievement."
         ));
         MESSAGES.put(NarratorType.NARCISSISTIC, narcissistic);
     }
@@ -250,6 +286,12 @@ public class NarratorMessages {
                 messages.add(narratorName + " grows impatient.");
                 messages.add(narratorName + " watches you do nothing.");
                 messages.add(narratorName + " observes the silence.");
+                break;
+            case "achievement":
+                messages.add(narratorName + " acknowledges your achievement.");
+                messages.add(narratorName + " watched you succeed.");
+                messages.add(narratorName + " notes your progress.");
+                messages.add(narratorName + " sees your accomplishment.");
                 break;
             default:
                 messages.add(narratorName + " speaks.");

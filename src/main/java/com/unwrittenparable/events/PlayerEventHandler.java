@@ -16,6 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.player.AdvancementEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -83,6 +84,15 @@ public class PlayerEventHandler {
     public void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
         NarratorManager.clearCombatState(player);
+    }
+
+    @SubscribeEvent
+    public void onAdvancement(AdvancementEvent event) {
+        if (!(event.getEntity() instanceof ServerPlayer player)) return;
+
+        if (event.getAdvancement().getDisplay() != null) {
+            NarratorManager.sendMessage(player, "achievement");
+        }
     }
 
     private void checkBiomeChange(ServerPlayer player) {
