@@ -97,7 +97,7 @@ public class PlayerEventHandler {
 
         if (hasDisplay) {
             TheUnwrittenParable.LOGGER.info("Triggering narrator for: " + advancementId);
-            NarratorManager.sendMessage(player, "achievement");
+            NarratorManager.broadcastMessage(player, "achievement");
         }
     }
 
