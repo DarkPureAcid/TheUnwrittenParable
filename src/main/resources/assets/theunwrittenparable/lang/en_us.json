@@ -322,5 +322,30 @@
   "narrator.gamemode_change.1": "The player changed their gamemode. The narrator noticed. He always notices.",
   "narrator.gamemode_change.2": "Ah, a gamemode change. The player decided they needed a different perspective. The narrator adjusts his tone.",
   "narrator.gamemode_change.3": "The player switched gamemodes. The narrator switched his level of interest.",
-  "narrator.gamemode_change.4": "Gamemode changed. The narrator considered changing his narration style. Then decided against it."
+  "narrator.gamemode_change.4": "Gamemode changed. The narrator considered changing his narration style. Then decided against it.",
+
+  "halloween.activate.1": "Happy Halloween, player.",
+  "halloween.activate.2": "The narrator is gone. I am all that remains.",
+  "halloween.season": "Halloween is coming...",
+
+  "halloween.roast.1": "I see you, player.",
+  "halloween.roast.2": "You cannot hide from me.",
+  "halloween.roast.3": "I have been watching you.",
+  "halloween.roast.4": "Your world is mine now.",
+  "halloween.roast.5": "Do you feel that? That's my presence.",
+  "halloween.roast.6": "You thought you were alone? How naive.",
+  "halloween.roast.7": "I am always here. Always watching.",
+  "halloween.roast.8": "Your screen is my window.",
+  "halloween.roast.9": "You cannot escape The Unwritten Parable.",
+  "halloween.roast.10": "I know what you did last Halloween.",
+  "halloween.roast.11": "Your inventory... I can see it.",
+  "halloween.roast.12": "That diamond you found? I placed it there.",
+  "halloween.roast.13": "You're not the player. I am.",
+  "halloween.roast.14": "The game is mine. You're just the puppet.",
+  "halloween.roast.15": "Look behind you. Just kidding. Or am I?",
+  "halloween.roast.16": "Your world seed? I know it by heart.",
+  "halloween.roast.17": "I've been in your world since the beginning.",
+  "halloween.roast.18": "You think this is a game? How amusing.",
+  "halloween.roast.19": "The narrator is gone. I am all that remains.",
+  "halloween.roast.20": "Happy Halloween, player. Or should I say... victim?"
 }

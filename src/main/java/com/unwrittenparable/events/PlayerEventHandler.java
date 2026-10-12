@@ -54,6 +54,7 @@ public class PlayerEventHandler {
         checkLANState(player);
         checkCommandInput(player);
         checkGameModeChange(player);
+        HalloweenEvent.checkHalloween(player);
     }
 
     @SubscribeEvent
