@@ -2,6 +2,7 @@ package com.unwrittenparable.narrator;
 
 import com.unwrittenparable.config.ModConfig;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
@@ -26,6 +27,8 @@ public class NarratorManager {
             "\u15E0", "\u15E1", "\u15E2", "\u15E3", "\u15E4", "\u15E5", "\u15E6", "\u15E7",
             "\u15E8", "\u15E9"
     };
+
+    private static final int MAX_TITLE_WIDTH = 200;
 
     public static void sendMessage(LocalPlayer player, String category) {
         if (!ModConfig.ENABLE_NARRATOR.get()) return;
@@ -99,6 +102,8 @@ public class NarratorManager {
             displayName = I18n.get("narrator." + narratorName.toLowerCase() + ".name");
         }
 
+        displayName = limitTextWidth(mc, displayName);
+
         int color = isHerobrine ? 0xAA00AA : 0xFF5555;
 
         mc.gui.setTitle(Component.literal(displayName).withStyle(style -> style.withColor(color)));
@@ -124,23 +129,60 @@ public class NarratorManager {
         Component subtitleComponent;
 
         if (isHerobrine) {
-            titleComponent = Component.literal(convertToGalactic(narratorName)).withStyle(style -> style.withColor(0xAA00AA));
+            String galacticName = limitTextWidth(mc, convertToGalactic(narratorName));
+            titleComponent = Component.literal(galacticName).withStyle(style -> style.withColor(0xAA00AA));
 
             String translatedMsg = I18n.get(messageKey);
             String galacticMsg = convertToGalactic(translatedMsg);
-            String cutOffMsg = cutOffText(galacticMsg, 0.4f);
-            subtitleComponent = Component.literal(cutOffMsg).withStyle(style -> style.withColor(0xAA00AA));
+            String limitedMsg = limitTextWidth(mc, galacticMsg);
+            subtitleComponent = Component.literal(limitedMsg).withStyle(style -> style.withColor(0xAA00AA));
         } else if (isMultiplayer) {
-            titleComponent = Component.literal(narratorName).withStyle(style -> style.withColor(0xFF5555));
-            subtitleComponent = Component.translatable(messageKey).withStyle(style -> style.withColor(0xFFFFFF));
+            String limitedName = limitTextWidth(mc, narratorName);
+            titleComponent = Component.literal(limitedName).withStyle(style -> style.withColor(0xFF5555));
+
+            String translatedMsg = I18n.get(messageKey);
+            String limitedMsg = limitTextWidth(mc, translatedMsg);
+            subtitleComponent = Component.literal(limitedMsg).withStyle(style -> style.withColor(0xFFFFFF));
         } else {
-            titleComponent = Component.translatable("narrator." + narratorName.toLowerCase() + ".name").withStyle(style -> style.withColor(0xFF5555));
-            subtitleComponent = Component.translatable(messageKey).withStyle(style -> style.withColor(0xFFFFFF));
+            String displayName = I18n.get("narrator." + narratorName.toLowerCase() + ".name");
+            String limitedName = limitTextWidth(mc, displayName);
+            titleComponent = Component.literal(limitedName).withStyle(style -> style.withColor(0xFF5555));
+
+            String translatedMsg = I18n.get(messageKey);
+            String limitedMsg = limitTextWidth(mc, translatedMsg);
+            subtitleComponent = Component.literal(limitedMsg).withStyle(style -> style.withColor(0xFFFFFF));
         }
 
         mc.gui.setTitle(titleComponent);
         mc.gui.setSubtitle(subtitleComponent);
         mc.gui.setTimes(10, 60, 10);
+    }
+
+    private static String limitTextWidth(Minecraft mc, String text) {
+        Font font = mc.font;
+        int guiScale = mc.options.guiScale().get();
+        int screenWidth = mc.getWindow().getGuiScaledWidth();
+
+        int maxPixelWidth;
+        if (guiScale == 0) {
+            maxPixelWidth = screenWidth / 2;
+        } else {
+            maxPixelWidth = Math.min(screenWidth - 40, MAX_TITLE_WIDTH * guiScale);
+        }
+
+        if (maxPixelWidth < 100) {
+            maxPixelWidth = 100;
+        }
+
+        if (font.width(text) > maxPixelWidth) {
+            String truncated = text;
+            while (font.width(truncated + "...") > maxPixelWidth && truncated.length() > 0) {
+                truncated = truncated.substring(0, truncated.length() - 1);
+            }
+            return truncated + "...";
+        }
+
+        return text;
     }
 
     private static String convertToGalactic(String text) {
@@ -154,14 +196,6 @@ public class NarratorManager {
             }
         }
         return result.toString();
-    }
-
-    private static String cutOffText(String text, float percentage) {
-        int cutOffIndex = (int) (text.length() * percentage);
-        if (cutOffIndex >= text.length()) {
-            return text;
-        }
-        return text.substring(0, cutOffIndex) + "...";
     }
 
     public static void clearCombatState(LocalPlayer player) {
