@@ -101,6 +101,7 @@ public class NarratorManager {
                 messageKey = NarratorMessages.getMessage(type, category);
             } catch (IllegalArgumentException e) {
                 player.sendSystemMessage(Component.literal("Unknown narrator: " + narratorName));
+                player.sendSystemMessage(Component.literal("Valid narrators: Stanley, Nigel, Malcolm, Edgar, Chester, Reginald, Herobrine, Notch, Chuck Norris"));
                 return;
             }
         }

@@ -15,6 +15,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ClientChatEvent;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
+import net.minecraftforge.event.CommandEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -122,6 +123,23 @@ public class PlayerEventHandler {
                 NarratorManager.broadcastMessage(player, reactionKey);
             } else {
                 TheUnwrittenParable.LOGGER.info("No reaction found for command: " + message);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void onCommand(CommandEvent event) {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null) return;
+
+        String command = event.getParseResults().getReader().getString();
+        TheUnwrittenParable.LOGGER.info("CommandEvent fired: " + command);
+
+        if (command.startsWith("/")) {
+            String reactionKey = CommandReactions.getReaction(command);
+            if (reactionKey != null) {
+                TheUnwrittenParable.LOGGER.info("Command reaction: " + reactionKey);
+                NarratorManager.broadcastMessage(player, reactionKey);
             }
         }
     }
