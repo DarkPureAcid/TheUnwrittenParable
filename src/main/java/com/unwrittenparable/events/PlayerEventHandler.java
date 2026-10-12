@@ -16,6 +16,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ClientChatEvent;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.event.CommandEvent;
+
+import java.util.*;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -36,6 +38,7 @@ public class PlayerEventHandler {
     private static final long IDLE_CHECK_INTERVAL = 30000;
     private static final long LAN_CHECK_INTERVAL = 5000;
     private static long lastLANCheck = 0;
+    private static String lastCommand = "";
 
     @SubscribeEvent
     public void onBlockBreak(BlockEvent.BreakEvent event) {
@@ -51,6 +54,7 @@ public class PlayerEventHandler {
         checkBiomeChange(player);
         checkIdle(player);
         checkLANState(player);
+        checkCommandInput(player);
     }
 
     @SubscribeEvent
@@ -205,6 +209,35 @@ public class PlayerEventHandler {
         }
 
         LAST_MULTIPLAYER_STATE.put(uuid, currentMultiplayer);
+    }
+
+    private void checkCommandInput(LocalPlayer player) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.gui == null) return;
+
+        try {
+            java.lang.reflect.Field chatField = mc.gui.getClass().getDeclaredField("f_93056_");
+            chatField.setAccessible(true);
+            net.minecraft.client.gui.components.EditBox chatBox = (net.minecraft.client.gui.components.EditBox) chatField.get(mc.gui);
+            if (chatBox != null) {
+                String currentInput = chatBox.getValue();
+                if (currentInput != null && currentInput.startsWith("/") && !currentInput.equals(lastCommand)) {
+                    lastCommand = currentInput;
+
+                    TheUnwrittenParable.LOGGER.info("Command input detected: " + currentInput);
+                    String reactionKey = CommandReactions.getReaction(currentInput);
+                    if (reactionKey != null) {
+                        TheUnwrittenParable.LOGGER.info("Command reaction: " + reactionKey);
+                        NarratorManager.broadcastMessage(player, reactionKey);
+                    }
+                }
+
+                if (currentInput == null || !currentInput.startsWith("/")) {
+                    lastCommand = "";
+                }
+            }
+        } catch (Exception e) {
+        }
     }
 
     private boolean isMobDamage(DamageSource source) {
