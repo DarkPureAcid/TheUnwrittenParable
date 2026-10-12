@@ -86,13 +86,17 @@ public class PlayerEventHandler {
     }
 
     @SubscribeEvent
-    public void onAdvancement(AdvancementEvent.AdvancementEarnEvent event) {
+    public void onAdvancement(AdvancementEvent event) {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
 
-        TheUnwrittenParable.LOGGER.info("Advancement earned: " + event.getAdvancement().getId());
-        TheUnwrittenParable.LOGGER.info("Has display: " + (event.getAdvancement().getDisplay() != null));
+        String advancementId = event.getAdvancement().getId().toString();
+        boolean hasDisplay = event.getAdvancement().getDisplay() != null;
 
-        if (event.getAdvancement().getDisplay() != null) {
+        TheUnwrittenParable.LOGGER.info("Advancement event: " + advancementId);
+        TheUnwrittenParable.LOGGER.info("Has display: " + hasDisplay);
+
+        if (hasDisplay) {
+            TheUnwrittenParable.LOGGER.info("Triggering narrator for: " + advancementId);
             NarratorManager.sendMessage(player, "achievement");
         }
     }
