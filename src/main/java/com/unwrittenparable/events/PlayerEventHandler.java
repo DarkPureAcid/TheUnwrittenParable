@@ -1,9 +1,9 @@
 package com.unwrittenparable.events;
 
 import com.unwrittenparable.TheUnwrittenParable;
+import com.unwrittenparable.narrator.ClientNarratorData;
 import com.unwrittenparable.narrator.NarratorManager;
 import com.unwrittenparable.narrator.NarratorType;
-import com.unwrittenparable.narrator.ClientNarratorData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
@@ -31,9 +31,12 @@ public class PlayerEventHandler {
     private static final Map<UUID, ResourceLocation> LAST_BIOME = new HashMap<>();
     private static final Map<UUID, Long> BIOME_CHECK_COOLDOWN = new HashMap<>();
     private static final Map<UUID, Long> LAST_IDLE_MESSAGE = new HashMap<>();
+    private static final Map<UUID, Boolean> LAST_MULTIPLAYER_STATE = new HashMap<>();
     private static final Random RANDOM = new Random();
 
     private static final long IDLE_CHECK_INTERVAL = 30000;
+    private static final long LAN_CHECK_INTERVAL = 5000;
+    private static long lastLANCheck = 0;
 
     @SubscribeEvent
     public void onBlockBreak(BlockEvent.BreakEvent event) {
@@ -48,6 +51,7 @@ public class PlayerEventHandler {
 
         checkBiomeChange(player);
         checkIdle(player);
+        checkLANState(player);
     }
 
     @SubscribeEvent
@@ -72,7 +76,10 @@ public class PlayerEventHandler {
         if (player == null) return;
 
         ClientNarratorData data = ClientNarratorData.get();
-        data.setMultiplayer(!Minecraft.getInstance().isSingleplayer());
+        boolean isMultiplayer = !Minecraft.getInstance().isSingleplayer();
+        data.setMultiplayer(isMultiplayer);
+
+        LAST_MULTIPLAYER_STATE.put(player.getUUID(), isMultiplayer);
 
         showAssignedNarrator(player, data);
     }
@@ -88,7 +95,6 @@ public class PlayerEventHandler {
     public void onAdvancement(AdvancementEvent event) {
         if (!(event.getEntity() instanceof LocalPlayer player)) return;
 
-        String advancementId = event.getAdvancement().getId().toString();
         boolean hasDisplay = event.getAdvancement().getDisplay() != null;
 
         if (hasDisplay) {
@@ -130,6 +136,28 @@ public class PlayerEventHandler {
             NarratorManager.sendMessage(player, "idle");
             LAST_IDLE_MESSAGE.put(uuid, currentTime);
         }
+    }
+
+    private void checkLANState(LocalPlayer player) {
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastLANCheck < LAN_CHECK_INTERVAL) return;
+        lastLANCheck = currentTime;
+
+        UUID uuid = player.getUUID();
+        boolean currentMultiplayer = !Minecraft.getInstance().isSingleplayer();
+        Boolean lastState = LAST_MULTIPLAYER_STATE.get(uuid);
+
+        if (lastState != null && !lastState && currentMultiplayer) {
+            ClientNarratorData data = ClientNarratorData.get();
+            data.setMultiplayer(true);
+
+            String narratorName = data.getMultiplayerNarrator();
+            player.sendSystemMessage(Component.translatable("narrator.lan.taken_over", Component.literal(narratorName)));
+
+            NarratorManager.broadcastMessage(player, "biome_enter");
+        }
+
+        LAST_MULTIPLAYER_STATE.put(uuid, currentMultiplayer);
     }
 
     private boolean isMobDamage(DamageSource source) {

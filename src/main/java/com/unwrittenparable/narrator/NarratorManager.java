@@ -5,8 +5,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundBossEventPacket;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.BossEvent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -26,6 +28,10 @@ public class NarratorManager {
             "\u15E0", "\u15E1", "\u15E2", "\u15E3", "\u15E4", "\u15E5", "\u15E6", "\u15E7",
             "\u15E8", "\u15E9"
     };
+
+    private static UUID bossBarId = null;
+    private static float bossBarProgress = 1.0f;
+    private static boolean bossBarActive = false;
 
     public static void sendMessage(LocalPlayer player, String category) {
         if (!ModConfig.ENABLE_NARRATOR.get()) return;
@@ -82,32 +88,67 @@ public class NarratorManager {
         }
 
         if (messageKey != null && !messageKey.isEmpty()) {
-            showBossBarThenMessage(player, narratorName, messageKey, data.isMultiplayer(), isHerobrine);
+            showBossBarAndMessage(player, narratorName, messageKey, data.isMultiplayer(), isHerobrine);
         }
     }
 
-    private static void showBossBarThenMessage(LocalPlayer player, String narratorName, String messageKey, boolean isMultiplayer, boolean isHerobrine) {
+    private static void showBossBarAndMessage(LocalPlayer player, String narratorName, String messageKey, boolean isMultiplayer, boolean isHerobrine) {
         Minecraft mc = Minecraft.getInstance();
-        if (mc.gui == null) return;
+        if (mc.getConnection() == null) return;
 
-        String displayText;
+        removeBossBar();
+
+        bossBarId = UUID.randomUUID();
+        bossBarProgress = 1.0f;
+        bossBarActive = true;
+
+        Component bossBarTitle;
+        BossEvent.BossBarColor color;
+
         if (isHerobrine) {
-            displayText = convertToGalactic(narratorName);
+            bossBarTitle = Component.literal(convertToGalactic(narratorName)).withStyle(style -> style.withColor(0xAA00AA));
+            color = BossEvent.BossBarColor.PURPLE;
         } else if (isMultiplayer) {
-            displayText = narratorName;
+            bossBarTitle = Component.literal(narratorName).withStyle(style -> style.withColor(0xFF5555));
+            color = BossEvent.BossBarColor.RED;
         } else {
-            displayText = I18n.get("narrator." + narratorName.toLowerCase() + ".name");
+            bossBarTitle = Component.translatable("narrator." + narratorName.toLowerCase() + ".name").withStyle(style -> style.withColor(0xFF5555));
+            color = BossEvent.BossBarColor.RED;
         }
 
-        mc.gui.setTitle(Component.literal(displayText).withStyle(style -> style.withColor(isHerobrine ? 0xAA00AA : 0xFF5555)));
-        mc.gui.setSubtitle(Component.literal("..."));
-        mc.gui.setTimes(5, 20, 5);
+        ClientboundBossEventPacket addPacket = ClientboundBossEventPacket.createAddPacket(
+                new BossEvent(bossBarId, bossBarTitle, color, BossEvent.BossBarOverlay.PROGRESS) {
+                    @Override
+                    public float getProgress() {
+                        return bossBarProgress;
+                    }
+                }
+        );
+        mc.getConnection().send(addPacket);
 
-        SCHEDULER.schedule(() -> {
+        SCHEDULER.scheduleAtFixedRate(() -> {
             Minecraft.getInstance().execute(() -> {
-                showTitleMessage(player, narratorName, messageKey, isMultiplayer, isHerobrine);
+                if (!bossBarActive) return;
+
+                bossBarProgress -= 0.05f;
+                if (bossBarProgress <= 0) {
+                    bossBarProgress = 0;
+                    removeBossBar();
+                    showTitleMessage(player, narratorName, messageKey, isMultiplayer, isHerobrine);
+                    return;
+                }
+
+                ClientboundBossEventPacket updatePacket = ClientboundBossEventPacket.createUpdateProgressPacket(
+                        new BossEvent(bossBarId, Component.literal(""), BossEvent.BossBarColor.RED, BossEvent.BossBarOverlay.PROGRESS) {
+                            @Override
+                            public float getProgress() {
+                                return bossBarProgress;
+                            }
+                        }
+                );
+                mc.getConnection().send(updatePacket);
             });
-        }, 1000, TimeUnit.MILLISECONDS);
+        }, 0, 50, TimeUnit.MILLISECONDS);
     }
 
     private static void showTitleMessage(LocalPlayer player, String narratorName, String messageKey, boolean isMultiplayer, boolean isHerobrine) {
@@ -138,6 +179,16 @@ public class NarratorManager {
 
         if (mc.player != null) {
             mc.player.playNotifySound(SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.AMBIENT, 0.5f, 1.0f);
+        }
+    }
+
+    private static void removeBossBar() {
+        Minecraft mc = Minecraft.getInstance();
+        if (bossBarId != null && mc.getConnection() != null) {
+            bossBarActive = false;
+            ClientboundBossEventPacket removePacket = ClientboundBossEventPacket.createRemovePacket(bossBarId);
+            mc.getConnection().send(removePacket);
+            bossBarId = null;
         }
     }
 
