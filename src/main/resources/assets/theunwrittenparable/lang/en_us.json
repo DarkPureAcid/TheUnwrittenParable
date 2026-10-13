@@ -324,7 +324,7 @@
   "narrator.command.time.1": "%s changed the time. The narrator's clock remains accurate.",
   "narrator.command.time.2": "Ah, time manipulation. %s thinks they can control time. The narrator disagrees.",
   "narrator.command.time.3": "%s set the time. The narrator set his watch. He's always prepared.",
-  "narrator.command.time.4": "Time changed. The narrator's schedule remains unchanged. He's very punctual.",
+  "narrator.command.time.4": "Time changed. %s's schedule remains unchanged. He's very punctual.",
 
   "narrator.command.weather.1": "%s changed the weather. The narrator's mood remains the same.",
   "narrator.command.weather.2": "Ah, weather control. %s thinks they can change the atmosphere. The narrator controls the narrative.",

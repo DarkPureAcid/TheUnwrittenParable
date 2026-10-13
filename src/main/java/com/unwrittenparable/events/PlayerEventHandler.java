@@ -284,14 +284,22 @@ public class PlayerEventHandler {
 
     private void checkDifficultyChange(LocalPlayer player) {
         try {
-            net.minecraft.world.Difficulty currentDifficulty = player.level().getDifficulty();
+            net.minecraft.world.Difficulty currentDifficulty = null;
 
-            if (lastDifficulty != null && !lastDifficulty.equals(currentDifficulty)) {
+            if (player.level().getServer() != null) {
+                currentDifficulty = player.level().getServer().getWorldData().getDifficulty();
+            } else {
+                currentDifficulty = player.level().getDifficulty();
+            }
+
+            if (currentDifficulty != null && lastDifficulty != null && !lastDifficulty.equals(currentDifficulty)) {
                 TheUnwrittenParable.LOGGER.info("Difficulty changed from " + lastDifficulty + " to " + currentDifficulty);
                 NarratorManager.broadcastMessage(player, "difficulty_change");
             }
 
-            lastDifficulty = currentDifficulty;
+            if (currentDifficulty != null) {
+                lastDifficulty = currentDifficulty;
+            }
         } catch (Exception e) {
             TheUnwrittenParable.LOGGER.debug("Failed to check difficulty", e);
         }
