@@ -2,6 +2,7 @@ package com.unwrittenparable;
 
 import com.unwrittenparable.config.ModConfig;
 import com.unwrittenparable.events.CommandEventHandler;
+import com.unwrittenparable.events.PlayerActionEventHandler;
 import com.unwrittenparable.events.PlayerEventHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -19,6 +20,7 @@ public class TheUnwrittenParable {
         ModLoadingContext.get().registerConfig(Type.COMMON, ModConfig.SPEC, "theunwrittenparable-common.toml");
 
         MinecraftForge.EVENT_BUS.register(new PlayerEventHandler());
+        MinecraftForge.EVENT_BUS.register(new PlayerActionEventHandler());
         MinecraftForge.EVENT_BUS.register(new CommandEventHandler());
 
         LOGGER.info("The Unwritten Parable loaded (Client-Side).");

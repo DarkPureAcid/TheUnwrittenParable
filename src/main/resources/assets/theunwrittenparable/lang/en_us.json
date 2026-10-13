@@ -347,5 +347,15 @@
   "halloween.roast.17": "I've been in your world since the beginning.",
   "halloween.roast.18": "You think this is a game? How amusing.",
   "halloween.roast.19": "The narrator is gone. I am all that remains.",
-  "halloween.roast.20": "Happy Halloween, player. Or should I say... victim?"
+  "halloween.roast.20": "Happy Halloween, player. Or should I say... victim?",
+
+  "narrator.action.inventory.1": "The player opened their inventory. The narrator wonders what they're looking for.",
+  "narrator.action.inventory.2": "Ah, the inventory. The player's personal space. The narrator respects privacy. Sometimes.",
+  "narrator.action.inventory.3": "The player is organizing. The narrator approves of organization. It makes narration easier.",
+  "narrator.action.inventory.4": "Inventory opened. The narrator takes notes. He always takes notes.",
+
+  "narrator.action.eat.1": "The player is eating. The narrator watches. It's... intimate.",
+  "narrator.action.eat.2": "Ah, sustenance. The player needs energy to continue the story.",
+  "narrator.action.eat.3": "The player eats. The narrator wonders if they taste the pixels.",
+  "narrator.action.eat.4": "Eating. A fundamental human need. The narrator observes with mild interest."
 }

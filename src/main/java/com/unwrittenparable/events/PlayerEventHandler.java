@@ -122,12 +122,10 @@ public class PlayerEventHandler {
             LocalPlayer player = Minecraft.getInstance().player;
             if (player == null) return;
 
-            if (command.startsWith("/")) {
-                String reactionKey = CommandReactions.getReaction(command);
-                TheUnwrittenParable.LOGGER.info("Command: " + command + " -> Reaction: " + reactionKey);
-                if (reactionKey != null) {
-                    NarratorManager.broadcastMessage(player, reactionKey);
-                }
+            String reactionKey = CommandReactions.getReaction(command);
+            TheUnwrittenParable.LOGGER.info("Command: " + command + " -> Reaction: " + reactionKey);
+            if (reactionKey != null) {
+                NarratorManager.broadcastMessage(player, reactionKey);
             }
         });
     }
