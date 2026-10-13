@@ -182,17 +182,21 @@ public class NarratorManager {
 
         displayName = limitTextWidth(mc, displayName);
 
-        NarratorBossBar.showBossBar(displayName, 180000, () -> {
-            if (isHerobrine) {
-                animateHerobrineName(player, narratorName, messageKey);
-            } else {
-                showTitleMessage(player, narratorName, messageKey, isMultiplayer, isHerobrine);
-            }
-        });
+        NarratorBossBar.showBossBar(displayName, 180000, () -> {});
 
         if (mc.player != null) {
             mc.player.playNotifySound(SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.AMBIENT, 0.5f, 1.0f);
         }
+
+        SCHEDULER.schedule(() -> {
+            Minecraft.getInstance().execute(() -> {
+                if (isHerobrine) {
+                    animateHerobrineName(player, narratorName, messageKey);
+                } else {
+                    showTitleMessage(player, narratorName, messageKey, isMultiplayer, isHerobrine);
+                }
+            });
+        }, 1500, TimeUnit.MILLISECONDS);
     }
 
     private static void animateHerobrineName(LocalPlayer player, String narratorName, String messageKey) {
