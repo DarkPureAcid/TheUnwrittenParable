@@ -394,5 +394,60 @@
   "narrator.low_hunger.1": "%s is starving! The narrator urges them to eat!",
   "narrator.low_hunger.2": "Critical hunger! %s is wasting away! The narrator is worried!",
   "narrator.low_hunger.3": "%s is famished! The narrator can hear their stomach from here!",
-  "narrator.low_hunger.4": "Starvation is imminent! %s needs food NOW! The narrator panics!"
+  "narrator.low_hunger.4": "Starvation is imminent! %s needs food NOW! The narrator panics!",
+
+  "narrator.action.eat.1": "%s is eating. The narrator watches. It's... intimate.",
+  "narrator.action.eat.2": "Ah, sustenance. %s needs energy to continue the story.",
+  "narrator.action.eat.3": "%s eats. The narrator wonders if they taste the pixels.",
+  "narrator.action.eat.4": "Eating. A fundamental human need. The narrator observes with mild interest.",
+
+  "narrator.action.sleep.1": "%s is going to sleep. The narrator will wait. He's patient.",
+  "narrator.action.sleep.2": "Sleep. The narrator wonders what %s dreams about.",
+  "narrator.action.sleep.3": "%s sleeps. The narrator keeps watch. He always keeps watch.",
+  "narrator.action.sleep.4": "Good night, %s. The narrator will be here when you wake up.",
+
+  "narrator.action.wake_up.1": "%s wakes up. A new day. The narrator has plans.",
+  "narrator.action.wake_up.2": "Rise and shine, %s. The narrator has been waiting.",
+  "narrator.action.wake_up.3": "%s is awake. The narrator resumes his duties.",
+  "narrator.action.wake_up.4": "Good morning, %s. The narrator hopes you slept well. He didn't.",
+
+  "narrator.action.craft.1": "%s crafted something. The narrator approves of creativity.",
+  "narrator.action.craft.2": "Crafting. %s is making something. The narrator wonders what.",
+  "narrator.action.craft.3": "%s crafted an item. The narrator takes notes.",
+  "narrator.action.craft.4": "The crafting table sings. %s creates. The narrator observes.",
+
+  "narrator.action.smelt.1": "%s smelted something. The narrator likes fire.",
+  "narrator.action.smelt.2": "Smelting. %s is transforming materials. The narrator watches.",
+  "narrator.action.smelt.3": "%s smelted an item. The narrator appreciates the process.",
+  "narrator.action.smelt.4": "The furnace glows. %s smelts. The narrator is pleased.",
+
+  "narrator.action.mine.1": "%s is mining. The narrator approves of industry.",
+  "narrator.action.mine.2": "Mining. %s seeks resources. The narrator knows where they are.",
+  "narrator.action.mine.3": "%s mines. The earth yields its treasures. The narrator watches.",
+  "narrator.action.mine.4": "The pickaxe swings. %s mines. The narrator counts the blocks.",
+
+  "narrator.action.xp_level.1": "%s gained a level! The narrator is proud.",
+  "narrator.action.xp_level.2": "Level up! %s grows stronger. The narrator takes credit.",
+  "narrator.action.xp_level.3": "%s gained experience. The narrator approves of growth.",
+  "narrator.action.xp_level.4": "Experience gained. %s levels up. The narrator watches.",
+
+  "narrator.action.open_crafting.1": "%s opened the crafting table. The narrator wonders what they'll make.",
+  "narrator.action.open_crafting.2": "The crafting table awaits. %s considers their options.",
+  "narrator.action.open_crafting.3": "%s is crafting. The narrator watches with interest.",
+  "narrator.action.open_crafting.4": "The crafting table is open. %s is creative. The narrator approves.",
+
+  "narrator.action.open_furnace.1": "%s opened the furnace. The narrator likes fire.",
+  "narrator.action.open_furnace.2": "The furnace glows. %s prepares to smelt.",
+  "narrator.action.open_furnace.3": "%s checks the furnace. The narrator watches.",
+  "narrator.action.open_furnace.4": "The furnace is ready. %s begins. The narrator observes.",
+
+  "narrator.action.open_chest.1": "%s opened a chest. The narrator wonders what's inside.",
+  "narrator.action.open_chest.2": "A chest. %s explores. The narrator watches.",
+  "narrator.action.open_chest.3": "%s opens a chest. The narrator is curious.",
+  "narrator.action.open_chest.4": "The chest is open. %s looks inside. The narrator looks too.",
+
+  "narrator.action.trade.1": "%s is trading. The narrator approves of commerce.",
+  "narrator.action.trade.2": "Trading. %s exchanges goods. The narrator watches.",
+  "narrator.action.trade.3": "%s trades. The narrator appreciates a good deal.",
+  "narrator.action.trade.4": "The trade is made. %s is satisfied. The narrator is pleased."
 }
