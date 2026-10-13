@@ -100,7 +100,11 @@ public class CommandReactions {
     public static String getReaction(String command) {
         String baseCommand = command.split(" ")[0].toLowerCase();
 
-        List<String> reactions = COMMAND_REACTIONS.get(baseCommand);
+        if (baseCommand.startsWith("/")) {
+            baseCommand = baseCommand.substring(1);
+        }
+
+        List<String> reactions = COMMAND_REACTIONS.get("/" + baseCommand);
         if (reactions != null && !reactions.isEmpty()) {
             return reactions.get(RANDOM.nextInt(reactions.size()));
         }
@@ -110,6 +114,11 @@ public class CommandReactions {
 
     public static boolean hasReaction(String command) {
         String baseCommand = command.split(" ")[0].toLowerCase();
-        return COMMAND_REACTIONS.containsKey(baseCommand);
+
+        if (baseCommand.startsWith("/")) {
+            baseCommand = baseCommand.substring(1);
+        }
+
+        return COMMAND_REACTIONS.containsKey("/" + baseCommand);
     }
 }
