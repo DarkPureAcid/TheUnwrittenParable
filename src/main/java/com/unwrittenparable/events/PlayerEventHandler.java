@@ -109,8 +109,6 @@ public class PlayerEventHandler {
 
         LAST_MULTIPLAYER_STATE.put(player.getUUID(), isMultiplayer);
 
-        showAssignedNarrator(player, data);
-
         ModScanner.scanMods();
 
         if (ModScanner.isModInstalled("enigmatic_legacy")) {
