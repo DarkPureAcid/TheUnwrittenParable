@@ -4,6 +4,7 @@ import com.unwrittenparable.config.ModConfig;
 import com.unwrittenparable.events.CommandEventHandler;
 import com.unwrittenparable.events.PlayerActionEventHandler;
 import com.unwrittenparable.events.PlayerEventHandler;
+import com.unwrittenparable.narrator.ModGameRules;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -18,6 +19,8 @@ public class TheUnwrittenParable {
 
     public TheUnwrittenParable() {
         ModLoadingContext.get().registerConfig(Type.COMMON, ModConfig.SPEC, "theunwrittenparable-common.toml");
+
+        ModGameRules.register();
 
         MinecraftForge.EVENT_BUS.register(new PlayerEventHandler());
         MinecraftForge.EVENT_BUS.register(new PlayerActionEventHandler());

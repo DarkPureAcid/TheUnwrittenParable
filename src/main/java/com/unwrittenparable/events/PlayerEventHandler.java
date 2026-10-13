@@ -87,12 +87,28 @@ public class PlayerEventHandler {
         checkHealthState(player);
         checkHungerState(player);
         HalloweenEvent.checkHalloween(player);
+        ChristmasEvent.checkChristmas(player);
+        KrampusTransformation.update();
+        checkChatVisibility(player);
     }
 
     @SubscribeEvent
     public void onLivingDeath(LivingDeathEvent event) {
         if (!(event.getEntity() instanceof LocalPlayer player)) return;
         NarratorManager.sendMessage(player, "death");
+
+        if (ChristmasEvent.isChristmasActive()) {
+            String entityType = event.getEntity().getClass().getSimpleName();
+            if (entityType.contains("Villager")) {
+                ChristmasKarma.onVillagerKilled();
+            } else if (entityType.contains("Animal") || entityType.contains("Cow") || entityType.contains("Pig") || 
+                       entityType.contains("Sheep") || entityType.contains("Chicken") || entityType.contains("Rabbit")) {
+                ChristmasKarma.onAnimalKilled();
+            } else if (entityType.contains("Monster") || entityType.contains("Zombie") || entityType.contains("Skeleton") ||
+                       entityType.contains("Creeper") || entityType.contains("Spider") || entityType.contains("Enderman")) {
+                ChristmasKarma.onHostileMobKilled();
+            }
+        }
     }
 
     @SubscribeEvent
@@ -102,6 +118,13 @@ public class PlayerEventHandler {
         DamageSource source = event.getSource();
         if (isMobDamage(source)) {
             NarratorManager.sendMessage(player, "combat");
+        }
+
+        if (ChristmasEvent.isChristmasActive()) {
+            String entityType = event.getEntity().getClass().getSimpleName();
+            if (entityType.contains("Villager")) {
+                ChristmasKarma.onVillagerHurt();
+            }
         }
     }
 
@@ -252,24 +275,48 @@ public class PlayerEventHandler {
 
     private void checkGameModeChange(LocalPlayer player) {
         try {
-            java.lang.reflect.Field[] fields = player.getClass().getSuperclass().getDeclaredFields();
-            for (java.lang.reflect.Field field : fields) {
-                if (field.getType().getName().contains("PlayerGameMode") || field.getType().getName().contains("GameType")) {
-                    field.setAccessible(true);
-                    Object value = field.get(player);
-                    if (value != null) {
-                        TheUnwrittenParable.LOGGER.debug("Found field: " + field.getName() + " type: " + field.getType().getName() + " value: " + value);
-                        if (value instanceof net.minecraft.world.level.GameType) {
-                            net.minecraft.world.level.GameType currentGameMode = (net.minecraft.world.level.GameType) value;
-                            if (lastGameMode != null && !lastGameMode.equals(currentGameMode)) {
-                                TheUnwrittenParable.LOGGER.info("Game mode changed from " + lastGameMode + " to " + currentGameMode);
-                                NarratorManager.broadcastMessage(player, "gamemode_change");
+            // Look for gameMode field in LocalPlayer and its superclasses
+            Class<?> clazz = player.getClass();
+            while (clazz != null) {
+                java.lang.reflect.Field[] fields = clazz.getDeclaredFields();
+                for (java.lang.reflect.Field field : fields) {
+                    if (field.getType().getName().contains("MultiPlayerGameMode") || 
+                        field.getType().getName().contains("PlayerGameMode") ||
+                        field.getType().getName().contains("GameType")) {
+                        field.setAccessible(true);
+                        Object value = field.get(player);
+                        if (value != null) {
+                            net.minecraft.world.level.GameType currentGameMode = null;
+                            
+                            if (value instanceof net.minecraft.world.level.GameType) {
+                                currentGameMode = (net.minecraft.world.level.GameType) value;
+                            } else {
+                                // Try to get GameType from MultiPlayerGameMode via getPlayerMode()
+                                try {
+                                    java.lang.reflect.Method method = value.getClass().getMethod("getPlayerMode");
+                                    if (method != null) {
+                                        Object result = method.invoke(value);
+                                        if (result instanceof net.minecraft.world.level.GameType) {
+                                            currentGameMode = (net.minecraft.world.level.GameType) result;
+                                        }
+                                    }
+                                } catch (NoSuchMethodException ignored) {
+                                }
                             }
-                            lastGameMode = currentGameMode;
-                            return;
+                            
+                            if (currentGameMode != null) {
+                                TheUnwrittenParable.LOGGER.debug("Game mode detected: " + currentGameMode);
+                                if (lastGameMode != null && !lastGameMode.equals(currentGameMode)) {
+                                    TheUnwrittenParable.LOGGER.info("Game mode changed from " + lastGameMode + " to " + currentGameMode);
+                                    NarratorManager.broadcastMessage(player, "gamemode_change");
+                                }
+                                lastGameMode = currentGameMode;
+                                return;
+                            }
                         }
                     }
                 }
+                clazz = clazz.getSuperclass();
             }
         } catch (Exception e) {
             TheUnwrittenParable.LOGGER.debug("Failed to check game mode", e);
@@ -359,6 +406,32 @@ public class PlayerEventHandler {
             lastHungerState = currentState;
             lastHungerMessage = currentTime;
             NarratorManager.broadcastMessage(player, currentState);
+        }
+    }
+
+    private static long lastChatVisibilityMessage = 0;
+    private static final long CHAT_VISIBILITY_COOLDOWN = 60000;
+
+    private void checkChatVisibility(LocalPlayer player) {
+        if (!HalloweenEvent.isHalloweenActive()) return;
+
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.options == null) return;
+
+        net.minecraft.client.Options options = mc.options;
+        net.minecraft.world.entity.player.ChatVisiblity chatVisibility = options.chatVisibility().get();
+
+        if (chatVisibility == net.minecraft.world.entity.player.ChatVisiblity.HIDDEN) {
+            long currentTime = System.currentTimeMillis();
+            if (currentTime - lastChatVisibilityMessage < CHAT_VISIBILITY_COOLDOWN) return;
+            lastChatVisibilityMessage = currentTime;
+
+            player.sendSystemMessage(Component.literal("\u00A74HEROBRINE: You cannot silence me."));
+            player.sendSystemMessage(Component.literal("\u00A74I see everything. Even when you hide."));
+
+            Minecraft.getInstance().gui.setTitle(Component.literal("\u00A74HEROBRINE").withStyle(style -> style.withColor(0xAA00AA)));
+            Minecraft.getInstance().gui.setSubtitle(Component.literal("\u00A74You cannot hide from me.").withStyle(style -> style.withColor(0xAA00AA)));
+            Minecraft.getInstance().gui.setTimes(10, 100, 10);
         }
     }
 

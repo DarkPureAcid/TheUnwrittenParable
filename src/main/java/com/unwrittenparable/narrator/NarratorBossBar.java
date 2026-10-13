@@ -25,6 +25,18 @@ public class NarratorBossBar {
     private static ScheduledFuture<?> currentTask = null;
 
     public static void showBossBar(String narratorName, int durationMs, Runnable onComplete) {
+        showBossBar(narratorName, durationMs, onComplete, 0xFF5555, true, BossEvent.BossBarColor.RED);
+    }
+
+    public static void showBossBar(String narratorName, int durationMs, Runnable onComplete, int color) {
+        showBossBar(narratorName, durationMs, onComplete, color, true, BossEvent.BossBarColor.RED);
+    }
+
+    public static void showBossBar(String narratorName, int durationMs, Runnable onComplete, int color, boolean deplete) {
+        showBossBar(narratorName, durationMs, onComplete, color, deplete, BossEvent.BossBarColor.RED);
+    }
+
+    public static void showBossBar(String narratorName, int durationMs, Runnable onComplete, int color, boolean deplete, BossEvent.BossBarColor barColor) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.getConnection() == null) return;
 
@@ -38,9 +50,9 @@ public class NarratorBossBar {
 
             LerpingBossEvent bossEvent = new LerpingBossEvent(
                     bossBarId,
-                    Component.literal(narratorName).withStyle(style -> style.withColor(0xFF5555)),
+                    Component.literal(narratorName).withStyle(style -> style.withColor(color)),
                     1.0f,
-                    BossEvent.BossBarColor.RED,
+                    barColor,
                     BossEvent.BossBarOverlay.PROGRESS,
                     false,
                     false,
@@ -59,25 +71,29 @@ public class NarratorBossBar {
                 }
             }
 
-            int totalTicks = durationMs / 50;
-            float decrementPerTick = 1.0f / totalTicks;
+            if (deplete) {
+                int totalTicks = durationMs / 50;
+                float decrementPerTick = 1.0f / totalTicks;
 
-            currentTask = scheduler.scheduleAtFixedRate(() -> {
-                Minecraft.getInstance().execute(() -> {
-                    if (!active) return;
+                currentTask = scheduler.scheduleAtFixedRate(() -> {
+                    Minecraft.getInstance().execute(() -> {
+                        if (!active) return;
 
-                    float progress = bossEvent.getProgress() - decrementPerTick;
-                    if (progress <= 0) {
-                        removeBossBar();
-                        if (onComplete != null) {
-                            onComplete.run();
+                        float progress = bossEvent.getProgress() - decrementPerTick;
+                        if (progress <= 0) {
+                            removeBossBar();
+                            if (onComplete != null) {
+                                onComplete.run();
+                            }
+                            return;
                         }
-                        return;
-                    }
 
-                    bossEvent.setProgress(progress);
-                });
-            }, 0, 50, TimeUnit.MILLISECONDS);
+                        bossEvent.setProgress(progress);
+                    });
+                }, 0, 50, TimeUnit.MILLISECONDS);
+            } else {
+                TheUnwrittenParable.LOGGER.info("Boss bar created without depletion (Christmas mode)");
+            }
 
         } catch (Exception e) {
             TheUnwrittenParable.LOGGER.error("Failed to create boss bar", e);

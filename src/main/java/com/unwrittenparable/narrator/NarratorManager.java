@@ -1,6 +1,10 @@
 package com.unwrittenparable.narrator;
 
 import com.unwrittenparable.config.ModConfig;
+import com.unwrittenparable.events.ChristmasEvent;
+import com.unwrittenparable.events.ChristmasKarma;
+import com.unwrittenparable.events.HalloweenEvent;
+import com.unwrittenparable.events.KrampusTransformation;
 import com.unwrittenparable.integration.EnigmaticLegacyIntegration;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -9,6 +13,7 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.BossEvent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -72,6 +77,8 @@ public class NarratorManager {
 
         if (category.startsWith("narrator.command.") || category.startsWith("narrator.mod.")) {
             if (!NarratorGameRule.get().isCommandReactionsEnabled()) return;
+            sendDirectMessage(player, category);
+        } else if (category.startsWith("narrator.action.")) {
             sendDirectMessage(player, category);
         } else if (category.equals("achievement")) {
             if (!NarratorGameRule.get().isAchievementsEnabled()) return;
@@ -173,7 +180,20 @@ public class NarratorManager {
         if (mc.gui == null) return;
 
         String displayName;
-        if (isHerobrine) {
+        boolean isChristmas = ChristmasEvent.isChristmasActive();
+
+        if (isChristmas) {
+            if (KrampusTransformation.isTransforming()) {
+                displayName = KrampusTransformation.getTransformedName();
+            } else {
+                String listStatus = ChristmasKarma.getListStatus();
+                displayName = "Father Christmas (" + listStatus + " list)";
+                
+                if (ChristmasKarma.isOnNaughtyList() && !KrampusTransformation.isTransforming()) {
+                    KrampusTransformation.startTransformation();
+                }
+            }
+        } else if (isHerobrine) {
             displayName = narratorName;
         } else if (isMultiplayer) {
             displayName = narratorName;
@@ -183,7 +203,15 @@ public class NarratorManager {
 
         displayName = limitTextWidth(mc, displayName);
 
-        NarratorBossBar.showBossBar(displayName, 180000, () -> {});
+        if (isChristmas) {
+            int karmaColor = KrampusTransformation.isTransforming() ? KrampusTransformation.getTransformationColor() : ChristmasKarma.getKarmaColor();
+            BossEvent.BossBarColor barColor = KrampusTransformation.isTransforming() ? KrampusTransformation.getBossBarColor() : 
+                                              ChristmasKarma.isOnNiceList() ? BossEvent.BossBarColor.GREEN : 
+                                              ChristmasKarma.isOnNaughtyList() ? BossEvent.BossBarColor.RED : BossEvent.BossBarColor.YELLOW;
+            NarratorBossBar.showBossBar(displayName, 180000, () -> {}, karmaColor, false, barColor);
+        } else {
+            NarratorBossBar.showBossBar(displayName, 180000, () -> {});
+        }
 
         if (mc.player != null) {
             mc.player.playNotifySound(SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.AMBIENT, 0.5f, 1.0f);
@@ -191,7 +219,9 @@ public class NarratorManager {
 
         SCHEDULER.schedule(() -> {
             Minecraft.getInstance().execute(() -> {
-                if (isHerobrine) {
+                if (isChristmas) {
+                    showChristmasMessage(player, messageKey);
+                } else if (isHerobrine) {
                     animateHerobrineName(player, narratorName, messageKey);
                 } else {
                     showTitleMessage(player, narratorName, messageKey, isMultiplayer, isHerobrine);
@@ -290,6 +320,26 @@ public class NarratorManager {
         if (ModConfig.ENABLE_DORMANT_EYE_TTS.get() && EnigmaticLegacyIntegration.isTTSAvailable()) {
             String translatedMsg = I18n.get(messageKey, playerName);
             EnigmaticLegacyIntegration.speakWithDormantEye(translatedMsg);
+        }
+    }
+
+    private static void showChristmasMessage(LocalPlayer player, String messageKey) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.gui == null) return;
+
+        String playerName = player.getName().getString();
+        String translatedMsg = I18n.get(messageKey, playerName);
+        String limitedMsg = limitTextWidth(mc, translatedMsg);
+
+        Component titleComponent = Component.literal("Father Christmas").withStyle(style -> style.withColor(0x55FF55));
+        Component subtitleComponent = Component.literal(limitedMsg).withStyle(style -> style.withColor(0xFFFFFF));
+
+        mc.gui.setTitle(titleComponent);
+        mc.gui.setSubtitle(subtitleComponent);
+        mc.gui.setTimes(10, 60, 10);
+
+        if (mc.player != null) {
+            mc.player.playNotifySound(SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.AMBIENT, 0.5f, 1.2f);
         }
     }
 

@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+import com.unwrittenparable.events.ChristmasEvent;
 import com.unwrittenparable.events.HalloweenEvent;
 import com.unwrittenparable.narrator.*;
 import net.minecraft.client.Minecraft;
@@ -48,6 +49,8 @@ public class NarratorCommand {
                         .executes(NarratorCommand::showRules))
                 .then(Commands.literal("halloween")
                         .executes(NarratorCommand::toggleHalloween))
+                .then(Commands.literal("christmas")
+                        .executes(NarratorCommand::toggleChristmas))
                 .then(Commands.literal("help")
                         .executes(NarratorCommand::showHelp))
         );
@@ -179,12 +182,19 @@ public class NarratorCommand {
 
         NarratorGameRule rules = NarratorGameRule.get();
 
-        player.sendSystemMessage(Component.literal("=== Narrator Game Rules ==="));
-        player.sendSystemMessage(Component.literal("Narrator: " + (rules.isNarratorEnabled() ? "ON" : "OFF")));
-        player.sendSystemMessage(Component.literal("Command Reactions: " + (rules.isCommandReactionsEnabled() ? "ON" : "OFF")));
-        player.sendSystemMessage(Component.literal("Achievements: " + (rules.isAchievementsEnabled() ? "ON" : "OFF")));
-        player.sendSystemMessage(Component.literal("Combat Silence: " + (rules.isCombatSilenceEnabled() ? "ON" : "OFF")));
-        player.sendSystemMessage(Component.literal("Death Commentary: " + (rules.isDeathCommentaryEnabled() ? "ON" : "OFF")));
+        player.sendSystemMessage(Component.literal("\u00A76\u00A7l=== The Unwritten Parable ==="));
+        player.sendSystemMessage(Component.literal("\u00A77A Stanley Parable-inspired narrator mod"));
+        player.sendSystemMessage(Component.literal(""));
+        player.sendSystemMessage(Component.literal("\u00A7e=== Narrator Game Rules ==="));
+        player.sendSystemMessage(Component.literal("Narrator: " + (rules.isNarratorEnabled() ? "\u00A7aON" : "\u00A7cOFF")));
+        player.sendSystemMessage(Component.literal("Command Reactions: " + (rules.isCommandReactionsEnabled() ? "\u00A7aON" : "\u00A7cOFF")));
+        player.sendSystemMessage(Component.literal("Achievements: " + (rules.isAchievementsEnabled() ? "\u00A7aON" : "\u00A7cOFF")));
+        player.sendSystemMessage(Component.literal("Combat Silence: " + (rules.isCombatSilenceEnabled() ? "\u00A7aON" : "\u00A7cOFF")));
+        player.sendSystemMessage(Component.literal("Death Commentary: " + (rules.isDeathCommentaryEnabled() ? "\u00A7aON" : "\u00A7cOFF")));
+        player.sendSystemMessage(Component.literal(""));
+        player.sendSystemMessage(Component.literal("\u00A7e=== Seasonal Events ==="));
+        player.sendSystemMessage(Component.literal("Halloween: " + (HalloweenEvent.isHalloweenActive() ? "\u00A7aON" : "\u00A7cOFF") + " \u00A77(/narrator halloween)"));
+        player.sendSystemMessage(Component.literal("Christmas: " + (ChristmasEvent.isChristmasActive() ? "\u00A7aON" : "\u00A7cOFF") + " \u00A77(/narrator christmas)"));
 
         return 1;
     }
@@ -195,6 +205,15 @@ public class NarratorCommand {
 
         HalloweenEvent.toggleHalloween();
         player.sendSystemMessage(Component.literal("Halloween mode " + (HalloweenEvent.isHalloweenActive() ? "ON" : "OFF")));
+        return 1;
+    }
+
+    private static int toggleChristmas(CommandContext<CommandSourceStack> context) {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null) return 0;
+
+        ChristmasEvent.toggleChristmas();
+        player.sendSystemMessage(Component.literal("Christmas mode " + (ChristmasEvent.isChristmasActive() ? "ON" : "OFF")));
         return 1;
     }
 
@@ -214,6 +233,8 @@ public class NarratorCommand {
         player.sendSystemMessage(Component.literal("/narrator off - Disable narrator"));
         player.sendSystemMessage(Component.literal("/narrator toggle - Toggle narrator"));
         player.sendSystemMessage(Component.literal("/narrator rules - Show game rules"));
+        player.sendSystemMessage(Component.literal("/narrator halloween - Toggle Halloween event"));
+        player.sendSystemMessage(Component.literal("/narrator christmas - Toggle Christmas event"));
 
         return 1;
     }

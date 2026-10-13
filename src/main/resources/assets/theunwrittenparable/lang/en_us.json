@@ -449,5 +449,31 @@
   "narrator.action.trade.1": "%s is trading. The narrator approves of commerce.",
   "narrator.action.trade.2": "Trading. %s exchanges goods. The narrator watches.",
   "narrator.action.trade.3": "%s trades. The narrator appreciates a good deal.",
-  "narrator.action.trade.4": "The trade is made. %s is satisfied. The narrator is pleased."
+  "narrator.action.trade.4": "The trade is made. %s is satisfied. The narrator is pleased.",
+
+  "fatherchristmas.season.1": "December has arrived. Father Christmas is watching.",
+  "fatherchristmas.christmas_day.1": "Merry Christmas, %s! Father Christmas has arrived!",
+  "fatherchristmas.christmas_day.2": "Have you been good this year? Father Christmas knows.",
+
+  "fatherchristmas.greeting.1": "Ho ho ho! Merry Christmas, %s!",
+  "fatherchristmas.greeting.2": "Hello, %s! Father Christmas is pleased to see you!",
+  "fatherchristmas.greeting.3": "Greetings, %s! The North Pole sends its regards!",
+  "fatherchristmas.greeting.4": "Welcome, %s! Father Christmas has been expecting you!",
+  "fatherchristmas.greeting.5": "Good day, %s! The elves say hello!",
+
+  "fatherchristmas.naughty.1": "You've been on the naughty list, %s. Father Christmas is disappointed.",
+  "fatherchristmas.naughty.2": "Naughty, naughty, %s. Krampus is stirring.",
+  "fatherchristmas.naughty.3": "Your behavior has been noted, %s. Father Christmas sees all.",
+
+  "fatherchristmas.nice.1": "You've been good this year, %s! Father Christmas is proud!",
+  "fatherchristmas.nice.2": "The nice list welcomes you, %s! Keep up the good work!",
+  "fatherchristmas.nice.3": "Excellent behavior, %s! The elves are impressed!",
+
+  "fatherchristmas.krampus.warning": "I hear Krampus stirring in the mountains...",
+  "fatherchristmas.krampus.coming": "Krampus is coming. I can't protect you.",
+  "fatherchristmas.krampus.taken_over": "Krampus has taken over. There's nothing I can do.",
+
+  "fatherchristmas.hide_chat.1": "You can't hide from Father Christmas.",
+  "fatherchristmas.hide_chat.2": "Father Christmas sees everything, even when you try to hide.",
+  "fatherchristmas.hide_chat.3": "Hiding from Father Christmas? That's naughty behavior."
 }
