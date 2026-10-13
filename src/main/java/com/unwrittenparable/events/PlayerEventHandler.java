@@ -37,6 +37,7 @@ public class PlayerEventHandler {
     private static long lastLANCheck = 0;
     private static String lastCommand = "";
     private static net.minecraft.world.level.GameType lastGameMode = null;
+    private static net.minecraft.world.Difficulty lastDifficulty = null;
     private static boolean wasDead = false;
 
     @SubscribeEvent
@@ -77,6 +78,7 @@ public class PlayerEventHandler {
         checkCommandInput(player);
         checkGameModeChange(player);
         checkPlayerDeath(player);
+        checkDifficultyChange(player);
         HalloweenEvent.checkHalloween(player);
     }
 
@@ -278,6 +280,21 @@ public class PlayerEventHandler {
         }
 
         wasDead = isDead;
+    }
+
+    private void checkDifficultyChange(LocalPlayer player) {
+        try {
+            net.minecraft.world.Difficulty currentDifficulty = player.level().getDifficulty();
+
+            if (lastDifficulty != null && !lastDifficulty.equals(currentDifficulty)) {
+                TheUnwrittenParable.LOGGER.info("Difficulty changed from " + lastDifficulty + " to " + currentDifficulty);
+                NarratorManager.broadcastMessage(player, "difficulty_change");
+            }
+
+            lastDifficulty = currentDifficulty;
+        } catch (Exception e) {
+            TheUnwrittenParable.LOGGER.debug("Failed to check difficulty", e);
+        }
     }
 
     private boolean isMobDamage(DamageSource source) {

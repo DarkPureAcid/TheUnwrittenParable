@@ -304,5 +304,65 @@
   "narrator.creative_fly.1": "%s is flying. The narrator wishes he could fly.",
   "narrator.creative_fly.2": "Flying in creative. %s has ascended. The narrator watches from below.",
   "narrator.creative_fly.3": "%s defies gravity. The narrator defies boredom.",
-  "narrator.creative_fly.4": "Flight. %s's new perspective. The narrator's new commentary."
+  "narrator.creative_fly.4": "Flight. %s's new perspective. The narrator's new commentary.",
+
+  "narrator.command.tp.1": "Ah, teleportation. %s decided to skip the walking part. How efficient.",
+  "narrator.command.tp.2": "%s used the teleport command. The narrator had planned a lovely journey for them.",
+  "narrator.command.tp.3": "Teleportation. Because walking is for people who don't know the console exists.",
+  "narrator.command.tp.4": "%s appeared somewhere else. The narrator sighed. He'd been narrating that walk.",
+
+  "narrator.command.gamemode.1": "%s changed their gamemode. The narrator noticed. He always notices.",
+  "narrator.command.gamemode.2": "Ah, creative mode. %s decided they didn't need the narrator's challenges.",
+  "narrator.command.gamemode.3": "%s switched gamemodes. The narrator switched his level of interest.",
+  "narrator.command.gamemode.4": "Gamemode changed. The narrator considered changing his narration style. Then decided against it.",
+
+  "narrator.command.gamerule.1": "%s changed a gamerule. The narrator's rules remain unchanged.",
+  "narrator.command.gamerule.2": "Ah, gamerules. %s thinks they're in control. The narrator knows better.",
+  "narrator.command.gamerule.3": "%s modified the game's rules. The narrator's rules are immutable.",
+  "narrator.command.gamerule.4": "Gamerule changed. The narrator made a note. He always makes notes.",
+
+  "narrator.command.time.1": "%s changed the time. The narrator's clock remains accurate.",
+  "narrator.command.time.2": "Ah, time manipulation. %s thinks they can control time. The narrator disagrees.",
+  "narrator.command.time.3": "%s set the time. The narrator set his watch. He's always prepared.",
+  "narrator.command.time.4": "Time changed. The narrator's schedule remains unchanged. He's very punctual.",
+
+  "narrator.command.weather.1": "%s changed the weather. The narrator's mood remains the same.",
+  "narrator.command.weather.2": "Ah, weather control. %s thinks they can change the atmosphere. The narrator controls the narrative.",
+  "narrator.command.weather.3": "%s modified the weather. The narrator modified his tone. Slightly.",
+  "narrator.command.weather.4": "Weather changed. The narrator's forecast remains unchanged. It's always narrating.",
+
+  "narrator.command.give.1": "%s gave themselves items. The narrator gave himself a disappointed look.",
+  "narrator.command.give.2": "Ah, item generation. %s decided they needed help. The narrator disagrees.",
+  "narrator.command.give.3": "%s received items. The narrator received nothing. He's not bitter.",
+  "narrator.command.give.4": "Items given. The narrator's patience taken. He'll recover. Probably.",
+
+  "narrator.command.kill.1": "%s used the kill command. The narrator winced. That was harsh.",
+  "narrator.command.kill.2": "Ah, the kill command. %s decided to skip the fighting. How merciful.",
+  "narrator.command.kill.3": "%s eliminated something. The narrator eliminated his surprise.",
+  "narrator.command.kill.4": "Kill command used. The narrator's empathy remains intact. Barely.",
+
+  "narrator.command.effect.1": "%s gave themselves an effect. The narrator's effect is permanent.",
+  "narrator.command.effect.2": "Ah, potion effects. %s decided to enhance themselves. The narrator is already enhanced.",
+  "narrator.command.effect.3": "%s received an effect. The narrator received an opportunity to comment.",
+  "narrator.command.effect.4": "Effect applied. The narrator's effect on the story remains unchanged.",
+
+  "narrator.command.enchant.1": "%s enchanted something. The narrator's words are already magical.",
+  "narrator.command.enchant.2": "Ah, enchantments. %s decided to improve their gear. The narrator improves the story.",
+  "narrator.command.enchant.3": "%s added enchantments. The narrator added commentary. He always adds commentary.",
+  "narrator.command.enchant.4": "Enchantment applied. The narrator's enchantment on %s continues.",
+
+  "narrator.command.summon.1": "%s summoned something. The narrator summons his attention.",
+  "narrator.command.summon.2": "Ah, summoning. %s decided to create life. The narrator creates narrative.",
+  "narrator.command.summon.3": "%s summoned an entity. The narrator summoned his patience.",
+  "narrator.command.summon.4": "Entity summoned. The narrator's presence remains. It always remains.",
+
+  "narrator.command.difficulty.1": "%s changed the difficulty. The narrator's difficulty is eternal.",
+  "narrator.command.difficulty.2": "Ah, difficulty settings. %s decided the game was too hard. The narrator disagrees.",
+  "narrator.command.difficulty.3": "%s modified the difficulty. The narrator modified his expectations.",
+  "narrator.command.difficulty.4": "Difficulty changed. The narrator's challenge remains. He's very challenging.",
+
+  "narrator.difficulty_change.1": "%s changed the difficulty. The narrator's difficulty is eternal.",
+  "narrator.difficulty_change.2": "Ah, difficulty settings. %s decided the game was too hard. The narrator disagrees.",
+  "narrator.difficulty_change.3": "%s modified the difficulty. The narrator modified his expectations.",
+  "narrator.difficulty_change.4": "Difficulty changed. The narrator's challenge remains. He's very challenging."
 }
