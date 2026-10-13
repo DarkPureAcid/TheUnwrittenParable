@@ -47,10 +47,17 @@ public class NarratorBossBar {
                     false
             );
 
-            Field eventsField = BossHealthOverlay.class.getDeclaredField("f_93698_");
-            eventsField.setAccessible(true);
-            Map<UUID, LerpingBossEvent> events = (Map<UUID, LerpingBossEvent>) eventsField.get(overlay);
-            events.put(bossBarId, bossEvent);
+            Field[] fields = BossHealthOverlay.class.getDeclaredFields();
+            for (Field field : fields) {
+                TheUnwrittenParable.LOGGER.debug("BossHealthOverlay field: " + field.getName() + " type: " + field.getType().getName());
+                if (field.getType() == Map.class) {
+                    field.setAccessible(true);
+                    Map<UUID, LerpingBossEvent> events = (Map<UUID, LerpingBossEvent>) field.get(overlay);
+                    events.put(bossBarId, bossEvent);
+                    TheUnwrittenParable.LOGGER.info("Boss bar added to field: " + field.getName());
+                    break;
+                }
+            }
 
             int totalTicks = durationMs / 50;
             float decrementPerTick = 1.0f / totalTicks;
@@ -89,10 +96,16 @@ public class NarratorBossBar {
                 Minecraft mc = Minecraft.getInstance();
                 BossHealthOverlay overlay = mc.gui.getBossOverlay();
 
-                Field eventsField = BossHealthOverlay.class.getDeclaredField("f_93698_");
-                eventsField.setAccessible(true);
-                Map<UUID, LerpingBossEvent> events = (Map<UUID, LerpingBossEvent>) eventsField.get(overlay);
-                events.remove(bossBarId);
+                Field[] fields = BossHealthOverlay.class.getDeclaredFields();
+                for (Field field : fields) {
+                    if (field.getType() == Map.class) {
+                        field.setAccessible(true);
+                        Map<UUID, LerpingBossEvent> events = (Map<UUID, LerpingBossEvent>) field.get(overlay);
+                        events.remove(bossBarId);
+                        TheUnwrittenParable.LOGGER.info("Boss bar removed from field: " + field.getName());
+                        break;
+                    }
+                }
             } catch (Exception e) {
                 TheUnwrittenParable.LOGGER.debug("Failed to remove boss bar", e);
             }
