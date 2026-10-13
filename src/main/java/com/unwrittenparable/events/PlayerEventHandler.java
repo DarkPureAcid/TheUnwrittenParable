@@ -224,20 +224,24 @@ public class PlayerEventHandler {
 
     private void checkGameModeChange(LocalPlayer player) {
         try {
-            java.lang.reflect.Field gameModeField = player.getClass().getSuperclass().getDeclaredField("f_108620_");
-            gameModeField.setAccessible(true);
-            Object gameModeController = gameModeField.get(player);
-
-            if (gameModeController != null) {
-                java.lang.reflect.Method getGameModeMethod = gameModeController.getClass().getMethod("m_104805_");
-                net.minecraft.world.level.GameType currentGameMode = (net.minecraft.world.level.GameType) getGameModeMethod.invoke(gameModeController);
-
-                if (lastGameMode != null && !lastGameMode.equals(currentGameMode)) {
-                    TheUnwrittenParable.LOGGER.info("Game mode changed from " + lastGameMode + " to " + currentGameMode);
-                    NarratorManager.broadcastMessage(player, "gamemode_change");
+            java.lang.reflect.Field[] fields = player.getClass().getSuperclass().getDeclaredFields();
+            for (java.lang.reflect.Field field : fields) {
+                if (field.getType().getName().contains("PlayerGameMode") || field.getType().getName().contains("GameType")) {
+                    field.setAccessible(true);
+                    Object value = field.get(player);
+                    if (value != null) {
+                        TheUnwrittenParable.LOGGER.debug("Found field: " + field.getName() + " type: " + field.getType().getName() + " value: " + value);
+                        if (value instanceof net.minecraft.world.level.GameType) {
+                            net.minecraft.world.level.GameType currentGameMode = (net.minecraft.world.level.GameType) value;
+                            if (lastGameMode != null && !lastGameMode.equals(currentGameMode)) {
+                                TheUnwrittenParable.LOGGER.info("Game mode changed from " + lastGameMode + " to " + currentGameMode);
+                                NarratorManager.broadcastMessage(player, "gamemode_change");
+                            }
+                            lastGameMode = currentGameMode;
+                            return;
+                        }
+                    }
                 }
-
-                lastGameMode = currentGameMode;
             }
         } catch (Exception e) {
             TheUnwrittenParable.LOGGER.debug("Failed to check game mode", e);
