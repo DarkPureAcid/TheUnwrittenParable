@@ -10,6 +10,7 @@ public class ModConfig {
     public static final ForgeConfigSpec.BooleanValue ENABLE_COMBAT_SILENCE;
     public static final ForgeConfigSpec.BooleanValue ENABLE_DEATH_COMMENTARY;
     public static final ForgeConfigSpec.BooleanValue ENABLE_ESSENTIAL_INTEGRATION;
+    public static final ForgeConfigSpec.BooleanValue ENABLE_DORMANT_EYE_TTS;
 
     static {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -39,6 +40,10 @@ public class ModConfig {
         ENABLE_ESSENTIAL_INTEGRATION = builder
                 .comment("Enable Essential mod integration (friends list as narrator). Requires Essential mod.")
                 .define("enableEssentialIntegration", false);
+
+        ENABLE_DORMANT_EYE_TTS = builder
+                .comment("Enable Dormant Eye TTS for narrator voice. Requires Enigmatic Legacy mod.")
+                .define("enableDormantEyeTTS", false);
 
         builder.pop();
 

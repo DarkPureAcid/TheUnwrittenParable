@@ -1,6 +1,7 @@
 package com.unwrittenparable.narrator;
 
 import com.unwrittenparable.config.ModConfig;
+import com.unwrittenparable.integration.EnigmaticLegacyIntegration;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.player.LocalPlayer;
@@ -284,6 +285,11 @@ public class NarratorManager {
 
         if (mc.player != null) {
             mc.player.playNotifySound(SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.AMBIENT, 0.5f, 1.0f);
+        }
+
+        if (ModConfig.ENABLE_DORMANT_EYE_TTS.get() && EnigmaticLegacyIntegration.isTTSAvailable()) {
+            String translatedMsg = I18n.get(messageKey, playerName);
+            EnigmaticLegacyIntegration.speakWithDormantEye(translatedMsg);
         }
     }
 
