@@ -230,8 +230,9 @@ public class NarratorManager {
         Minecraft mc = Minecraft.getInstance();
         if (mc.gui == null) return;
 
+        String playerName = player.getName().getString();
         String galacticName = convertToGalactic(narratorName);
-        String translatedMsg = I18n.get(messageKey);
+        String translatedMsg = I18n.get(messageKey, playerName);
         String galacticMsg = convertToGalactic(translatedMsg);
         String limitedMsg = limitTextWidth(mc, galacticMsg);
 
@@ -248,6 +249,7 @@ public class NarratorManager {
         Minecraft mc = Minecraft.getInstance();
         if (mc.gui == null) return;
 
+        String playerName = player.getName().getString();
         Component titleComponent;
         Component subtitleComponent;
 
@@ -255,7 +257,7 @@ public class NarratorManager {
             String galacticName = limitTextWidth(mc, convertToGalactic(narratorName));
             titleComponent = Component.literal(galacticName).withStyle(style -> style.withColor(0xAA00AA));
 
-            String translatedMsg = I18n.get(messageKey);
+            String translatedMsg = I18n.get(messageKey, playerName);
             String galacticMsg = convertToGalactic(translatedMsg);
             String limitedMsg = limitTextWidth(mc, galacticMsg);
             subtitleComponent = Component.literal(limitedMsg).withStyle(style -> style.withColor(0xAA00AA));
@@ -263,7 +265,7 @@ public class NarratorManager {
             String limitedName = limitTextWidth(mc, narratorName);
             titleComponent = Component.literal(limitedName).withStyle(style -> style.withColor(0xFF5555));
 
-            String translatedMsg = I18n.get(messageKey);
+            String translatedMsg = I18n.get(messageKey, playerName);
             String limitedMsg = limitTextWidth(mc, translatedMsg);
             subtitleComponent = Component.literal(limitedMsg).withStyle(style -> style.withColor(0xFFFFFF));
         } else {
@@ -271,7 +273,7 @@ public class NarratorManager {
             String limitedName = limitTextWidth(mc, displayName);
             titleComponent = Component.literal(limitedName).withStyle(style -> style.withColor(0xFF5555));
 
-            String translatedMsg = I18n.get(messageKey);
+            String translatedMsg = I18n.get(messageKey, playerName);
             String limitedMsg = limitTextWidth(mc, translatedMsg);
             subtitleComponent = Component.literal(limitedMsg).withStyle(style -> style.withColor(0xFFFFFF));
         }
