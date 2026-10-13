@@ -42,7 +42,28 @@ public class PlayerEventHandler {
     @SubscribeEvent
     public void onBlockBreak(BlockEvent.BreakEvent event) {
         if (!(event.getPlayer() instanceof LocalPlayer player)) return;
-        NarratorManager.sendMessage(player, "block_break");
+
+        boolean isCreative = false;
+        try {
+            java.lang.reflect.Field[] fields = player.getClass().getSuperclass().getDeclaredFields();
+            for (java.lang.reflect.Field field : fields) {
+                if (field.getType() == net.minecraft.world.level.GameType.class) {
+                    field.setAccessible(true);
+                    net.minecraft.world.level.GameType gameMode = (net.minecraft.world.level.GameType) field.get(player);
+                    if (gameMode == net.minecraft.world.level.GameType.CREATIVE) {
+                        isCreative = true;
+                    }
+                    break;
+                }
+            }
+        } catch (Exception e) {
+        }
+
+        if (isCreative) {
+            NarratorManager.sendMessage(player, "creative_break");
+        } else {
+            NarratorManager.sendMessage(player, "block_break");
+        }
     }
 
     @SubscribeEvent

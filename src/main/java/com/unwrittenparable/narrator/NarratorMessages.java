@@ -45,6 +45,12 @@ public class NarratorMessages {
                 "narrator.stanley.achievement.3",
                 "narrator.stanley.achievement.4"
         ));
+        stanley.put("creative_break", Arrays.asList(
+                "narrator.creative_break.1",
+                "narrator.creative_break.2",
+                "narrator.creative_break.3",
+                "narrator.creative_break.4"
+        ));
         MESSAGES.put(NarratorType.STANLEY, stanley);
 
         // Nigel (Helpful)
@@ -83,6 +89,12 @@ public class NarratorMessages {
                 "narrator.nigel.achievement.2",
                 "narrator.nigel.achievement.3",
                 "narrator.nigel.achievement.4"
+        ));
+        nigel.put("creative_break", Arrays.asList(
+                "narrator.creative_break.1",
+                "narrator.creative_break.2",
+                "narrator.creative_break.3",
+                "narrator.creative_break.4"
         ));
         MESSAGES.put(NarratorType.HELPFUL, nigel);
 
@@ -123,6 +135,12 @@ public class NarratorMessages {
                 "narrator.malcolm.achievement.3",
                 "narrator.malcolm.achievement.4"
         ));
+        malcolm.put("creative_break", Arrays.asList(
+                "narrator.creative_break.1",
+                "narrator.creative_break.2",
+                "narrator.creative_break.3",
+                "narrator.creative_break.4"
+        ));
         MESSAGES.put(NarratorType.SARCASTIC, malcolm);
 
         // Edgar (Dark)
@@ -161,6 +179,12 @@ public class NarratorMessages {
                 "narrator.edgar.achievement.2",
                 "narrator.edgar.achievement.3",
                 "narrator.edgar.achievement.4"
+        ));
+        edgar.put("creative_break", Arrays.asList(
+                "narrator.creative_break.1",
+                "narrator.creative_break.2",
+                "narrator.creative_break.3",
+                "narrator.creative_break.4"
         ));
         MESSAGES.put(NarratorType.DARK, edgar);
 
@@ -201,6 +225,12 @@ public class NarratorMessages {
                 "narrator.chester.achievement.3",
                 "narrator.chester.achievement.4"
         ));
+        chester.put("creative_break", Arrays.asList(
+                "narrator.creative_break.1",
+                "narrator.creative_break.2",
+                "narrator.creative_break.3",
+                "narrator.creative_break.4"
+        ));
         MESSAGES.put(NarratorType.OPTIMISTIC, chester);
 
         // Reginald (Narcissistic)
@@ -240,6 +270,12 @@ public class NarratorMessages {
                 "narrator.reginald.achievement.2",
                 "narrator.reginald.achievement.3",
                 "narrator.reginald.achievement.4"
+        ));
+        reginald.put("creative_break", Arrays.asList(
+                "narrator.creative_break.1",
+                "narrator.creative_break.2",
+                "narrator.creative_break.3",
+                "narrator.creative_break.4"
         ));
         MESSAGES.put(NarratorType.NARCISSISTIC, reginald);
     }
@@ -292,6 +328,12 @@ public class NarratorMessages {
                 messages.add("narrator." + narratorName.toLowerCase() + ".achievement.2");
                 messages.add("narrator." + narratorName.toLowerCase() + ".achievement.3");
                 messages.add("narrator." + narratorName.toLowerCase() + ".achievement.4");
+                break;
+            case "creative_break":
+                messages.add("narrator.creative_break.1");
+                messages.add("narrator.creative_break.2");
+                messages.add("narrator.creative_break.3");
+                messages.add("narrator.creative_break.4");
                 break;
             default:
                 messages.add("narrator." + narratorName.toLowerCase() + ".idle.1");

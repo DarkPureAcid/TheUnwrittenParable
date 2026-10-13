@@ -357,5 +357,20 @@
   "narrator.action.eat.1": "The player is eating. The narrator watches. It's... intimate.",
   "narrator.action.eat.2": "Ah, sustenance. The player needs energy to continue the story.",
   "narrator.action.eat.3": "The player eats. The narrator wonders if they taste the pixels.",
-  "narrator.action.eat.4": "Eating. A fundamental human need. The narrator observes with mild interest."
+  "narrator.action.eat.4": "Eating. A fundamental human need. The narrator observes with mild interest.",
+
+  "narrator.creative_break.1": "The player destroyed a block instantly. Creative mode is a powerful tool.",
+  "narrator.creative_break.2": "The block vanished. The player didn't even swing. The narrator is impressed.",
+  "narrator.creative_break.3": "Creative mode. Where blocks fear to exist.",
+  "narrator.creative_break.4": "The player is in creative. The narrator adjusts his expectations.",
+
+  "narrator.creative_pick.1": "The player picked a block. Middle-click. How efficient.",
+  "narrator.creative_pick.2": "The player now has that block. Infinite supply. The narrator is envious.",
+  "narrator.creative_pick.3": "Block picked. The player's inventory grows. The narrator's patience shrinks.",
+  "narrator.creative_pick.4": "The player picked a block. The narrator picked his next words carefully.",
+
+  "narrator.creative_fly.1": "The player is flying. The narrator wishes he could fly.",
+  "narrator.creative_fly.2": "Flying in creative. The player has ascended. The narrator watches from below.",
+  "narrator.creative_fly.3": "The player defies gravity. The narrator defies boredom.",
+  "narrator.creative_fly.4": "Flight. The player's new perspective. The narrator's new commentary."
 }
