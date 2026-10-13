@@ -37,6 +37,7 @@ public class PlayerEventHandler {
     private static long lastLANCheck = 0;
     private static String lastCommand = "";
     private static net.minecraft.world.level.GameType lastGameMode = null;
+    private static boolean wasDead = false;
 
     @SubscribeEvent
     public void onBlockBreak(BlockEvent.BreakEvent event) {
@@ -54,6 +55,7 @@ public class PlayerEventHandler {
         checkLANState(player);
         checkCommandInput(player);
         checkGameModeChange(player);
+        checkPlayerDeath(player);
         HalloweenEvent.checkHalloween(player);
     }
 
@@ -242,6 +244,17 @@ public class PlayerEventHandler {
         } catch (Exception e) {
             TheUnwrittenParable.LOGGER.debug("Failed to check game mode", e);
         }
+    }
+
+    private void checkPlayerDeath(LocalPlayer player) {
+        boolean isDead = player.isDeadOrDying();
+
+        if (isDead && !wasDead) {
+            TheUnwrittenParable.LOGGER.info("Player died!");
+            NarratorManager.broadcastMessage(player, "death");
+        }
+
+        wasDead = isDead;
     }
 
     private boolean isMobDamage(DamageSource source) {

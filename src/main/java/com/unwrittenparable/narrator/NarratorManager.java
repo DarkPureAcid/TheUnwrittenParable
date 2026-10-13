@@ -47,7 +47,8 @@ public class NarratorManager {
 
         if (category.equals("death")) {
             IN_COMBAT.put(playerUUID, false);
-            if (!ModConfig.ENABLE_DEATH_COMMENTARY.get()) return;
+            sendNarratorMessage(player, category);
+            return;
         }
 
         if (!category.equals("death") && !category.equals("combat")) {
