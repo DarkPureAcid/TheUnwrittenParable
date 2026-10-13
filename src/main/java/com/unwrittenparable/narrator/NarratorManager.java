@@ -182,7 +182,7 @@ public class NarratorManager {
 
         displayName = limitTextWidth(mc, displayName);
 
-        NarratorBossBar.showBossBar(displayName, 1500, () -> {
+        NarratorBossBar.showBossBar(displayName, 3000, () -> {
             if (isHerobrine) {
                 animateHerobrineName(player, narratorName, messageKey);
             } else {
