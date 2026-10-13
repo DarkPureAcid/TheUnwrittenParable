@@ -364,5 +364,35 @@
   "narrator.difficulty_change.1": "%s changed the difficulty. The narrator's difficulty is eternal.",
   "narrator.difficulty_change.2": "Ah, difficulty settings. %s decided the game was too hard. The narrator disagrees.",
   "narrator.difficulty_change.3": "%s modified the difficulty. The narrator modified his expectations.",
-  "narrator.difficulty_change.4": "Difficulty changed. The narrator's challenge remains. He's very challenging."
+  "narrator.difficulty_change.4": "Difficulty changed. The narrator's challenge remains. He's very challenging.",
+
+  "narrator.full_health.1": "%s is fully healed. The narrator approves of their resilience.",
+  "narrator.full_health.2": "Full health. %s is ready for whatever comes next. The narrator has plans.",
+  "narrator.full_health.3": "%s is back to full strength. The narrator resets his expectations.",
+  "narrator.full_health.4": "Health restored. %s is whole again. The narrator notes this.",
+
+  "narrator.half_health.1": "%s is at half health. The narrator is concerned. Or is he?",
+  "narrator.half_health.2": "Half health. %s should be careful. The narrator wouldn't mind a little drama.",
+  "narrator.half_health.3": "%s is taking damage. The narrator watches with interest.",
+  "narrator.half_health.4": "Health is dropping. %s is vulnerable. The narrator considers intervening. Then decides against it.",
+
+  "narrator.low_health.1": "%s is critically wounded. The narrator holds his breath.",
+  "narrator.low_health.2": "Low health! %s is on the brink! The narrator is on the edge of his seat!",
+  "narrator.low_health.3": "%s is barely alive. The narrator whispers. This is getting interesting.",
+  "narrator.low_health.4": "Critical health! %s is hanging by a thread! The narrator watches. He always watches.",
+
+  "narrator.full_hunger.1": "%s is fully fed. The narrator approves of their appetite.",
+  "narrator.full_hunger.2": "Full hunger. %s is satisfied. The narrator wonders what's next.",
+  "narrator.full_hunger.3": "%s has eaten well. The narrator notes their satisfaction.",
+  "narrator.full_hunger.4": "Hunger satisfied. %s is content. The narrator is patient.",
+
+  "narrator.half_hunger.1": "%s is getting hungry. The narrator suggests finding food soon.",
+  "narrator.half_hunger.2": "Half hunger. %s's stomach growls. The narrator hears everything.",
+  "narrator.half_hunger.3": "%s is feeling peckish. The narrator recommends a snack.",
+  "narrator.half_hunger.4": "Hunger is rising. %s needs food. The narrator is concerned. Slightly.",
+
+  "narrator.low_hunger.1": "%s is starving! The narrator urges them to eat!",
+  "narrator.low_hunger.2": "Critical hunger! %s is wasting away! The narrator is worried!",
+  "narrator.low_hunger.3": "%s is famished! The narrator can hear their stomach from here!",
+  "narrator.low_hunger.4": "Starvation is imminent! %s needs food NOW! The narrator panics!"
 }

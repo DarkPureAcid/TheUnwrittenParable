@@ -39,6 +39,11 @@ public class PlayerEventHandler {
     private static net.minecraft.world.level.GameType lastGameMode = null;
     private static net.minecraft.world.Difficulty lastDifficulty = null;
     private static boolean wasDead = false;
+    private static String lastHealthState = "";
+    private static String lastHungerState = "";
+    private static long lastHealthMessage = 0;
+    private static long lastHungerMessage = 0;
+    private static final long HEALTH_MESSAGE_COOLDOWN = 30000;
 
     @SubscribeEvent
     public void onBlockBreak(BlockEvent.BreakEvent event) {
@@ -79,6 +84,8 @@ public class PlayerEventHandler {
         checkGameModeChange(player);
         checkPlayerDeath(player);
         checkDifficultyChange(player);
+        checkHealthState(player);
+        checkHungerState(player);
         HalloweenEvent.checkHalloween(player);
     }
 
@@ -300,6 +307,58 @@ public class PlayerEventHandler {
             }
         } catch (Exception e) {
             TheUnwrittenParable.LOGGER.debug("Failed to check difficulty", e);
+        }
+    }
+
+    private void checkHealthState(LocalPlayer player) {
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastHealthMessage < HEALTH_MESSAGE_COOLDOWN) return;
+
+        float health = player.getHealth();
+        float maxHealth = player.getMaxHealth();
+        float healthPercent = (health / maxHealth) * 100;
+
+        String currentState;
+        if (healthPercent >= 100) {
+            currentState = "full_health";
+        } else if (healthPercent <= 25) {
+            currentState = "low_health";
+        } else if (healthPercent <= 50) {
+            currentState = "half_health";
+        } else {
+            currentState = "";
+        }
+
+        if (!currentState.isEmpty() && !currentState.equals(lastHealthState)) {
+            lastHealthState = currentState;
+            lastHealthMessage = currentTime;
+            NarratorManager.broadcastMessage(player, currentState);
+        }
+    }
+
+    private void checkHungerState(LocalPlayer player) {
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastHungerMessage < HEALTH_MESSAGE_COOLDOWN) return;
+
+        int foodLevel = player.getFoodData().getFoodLevel();
+        int maxFood = 20;
+        float foodPercent = ((float) foodLevel / maxFood) * 100;
+
+        String currentState;
+        if (foodPercent >= 100) {
+            currentState = "full_hunger";
+        } else if (foodPercent <= 25) {
+            currentState = "low_hunger";
+        } else if (foodPercent <= 50) {
+            currentState = "half_hunger";
+        } else {
+            currentState = "";
+        }
+
+        if (!currentState.isEmpty() && !currentState.equals(lastHungerState)) {
+            lastHungerState = currentState;
+            lastHungerMessage = currentTime;
+            NarratorManager.broadcastMessage(player, currentState);
         }
     }
 
