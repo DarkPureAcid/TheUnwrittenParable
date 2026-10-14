@@ -94,18 +94,48 @@ public class PlayerEventHandler {
 
     @SubscribeEvent
     public void onLivingDeath(LivingDeathEvent event) {
-        if (!(event.getEntity() instanceof LocalPlayer player)) return;
-        NarratorManager.sendMessage(player, "death");
+        if (event.getEntity() instanceof LocalPlayer player) {
+            NarratorManager.sendMessage(player, "death");
+        }
 
         if (ChristmasEvent.isChristmasActive()) {
+            DamageSource source = event.getSource();
+            boolean isPlayerKill = source.getEntity() instanceof Player;
+            boolean isCreative = false;
+            
+            if (Minecraft.getInstance().player != null) {
+                try {
+                    LocalPlayer localPlayer = Minecraft.getInstance().player;
+                    java.lang.reflect.Field[] fields = localPlayer.getClass().getSuperclass().getDeclaredFields();
+                    for (java.lang.reflect.Field field : fields) {
+                        if (field.getType() == net.minecraft.world.level.GameType.class) {
+                            field.setAccessible(true);
+                            net.minecraft.world.level.GameType gameMode = (net.minecraft.world.level.GameType) field.get(localPlayer);
+                            if (gameMode == net.minecraft.world.level.GameType.CREATIVE) {
+                                isCreative = true;
+                            }
+                            break;
+                        }
+                    }
+                } catch (Exception e) {
+                }
+            }
+            
+            if (!isPlayerKill || isCreative) return;
+            
             String entityType = event.getEntity().getClass().getSimpleName();
-            if (entityType.contains("Villager")) {
+            TheUnwrittenParable.LOGGER.debug("Entity killed by player: " + entityType);
+            
+            if (entityType.contains("Villager") || entityType.contains("villager")) {
                 ChristmasKarma.onVillagerKilled();
+                TheUnwrittenParable.LOGGER.info("Villager killed by player! Karma decreased.");
             } else if (entityType.contains("Animal") || entityType.contains("Cow") || entityType.contains("Pig") || 
-                       entityType.contains("Sheep") || entityType.contains("Chicken") || entityType.contains("Rabbit")) {
+                       entityType.contains("Sheep") || entityType.contains("Chicken") || entityType.contains("Rabbit") ||
+                       entityType.contains("Horse") || entityType.contains("Wolf") || entityType.contains("Cat")) {
                 ChristmasKarma.onAnimalKilled();
             } else if (entityType.contains("Monster") || entityType.contains("Zombie") || entityType.contains("Skeleton") ||
-                       entityType.contains("Creeper") || entityType.contains("Spider") || entityType.contains("Enderman")) {
+                       entityType.contains("Creeper") || entityType.contains("Spider") || entityType.contains("Enderman") ||
+                       entityType.contains("Blaze") || entityType.contains("Ghast")) {
                 ChristmasKarma.onHostileMobKilled();
             }
         }
@@ -113,16 +143,21 @@ public class PlayerEventHandler {
 
     @SubscribeEvent
     public void onLivingHurt(LivingHurtEvent event) {
-        if (!(event.getEntity() instanceof LocalPlayer player)) return;
-
-        DamageSource source = event.getSource();
-        if (isMobDamage(source)) {
-            NarratorManager.sendMessage(player, "combat");
+        if (event.getEntity() instanceof LocalPlayer player) {
+            DamageSource source = event.getSource();
+            if (isMobDamage(source)) {
+                NarratorManager.sendMessage(player, "combat");
+            }
         }
 
         if (ChristmasEvent.isChristmasActive()) {
+            DamageSource source = event.getSource();
+            boolean isPlayerAttack = source.getEntity() instanceof Player;
+            
+            if (!isPlayerAttack) return;
+            
             String entityType = event.getEntity().getClass().getSimpleName();
-            if (entityType.contains("Villager")) {
+            if (entityType.contains("Villager") || entityType.contains("villager")) {
                 ChristmasKarma.onVillagerHurt();
             }
         }

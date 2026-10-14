@@ -1,7 +1,8 @@
 package com.unwrittenparable.events;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.unwrittenparable.TheUnwrittenParable;
-import com.unwrittenparable.narrator.ClientNarratorData;
 import com.unwrittenparable.narrator.ModScanner;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -9,20 +10,36 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.loading.FMLPaths;
 
+import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
 
 @OnlyIn(Dist.CLIENT)
 public class ChristmasKarma {
-    private static int karma = 50;
+    private static final String FILE_NAME = "theunwrittenparable_karma.json";
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static ChristmasKarma INSTANCE;
+
+    private int karma = 50;
     private static final int MIN_KARMA = 0;
     private static final int MAX_KARMA = 100;
     private static final int NEUTRAL_KARMA = 50;
 
     private static boolean useBornInChaosNaughtiness = false;
-    private static long lastKarmaMessage = 0;
+    private transient long lastKarmaMessage = 0;
     private static final long KARMA_MESSAGE_COOLDOWN = 30000;
+
+    public ChristmasKarma() {
+    }
+
+    public static ChristmasKarma get() {
+        if (INSTANCE == null) {
+            INSTANCE = load();
+        }
+        return INSTANCE;
+    }
 
     public static void init() {
         useBornInChaosNaughtiness = ModScanner.isModInstalled("born_in_chaos_v1");
@@ -33,13 +50,15 @@ public class ChristmasKarma {
         if (useBornInChaosNaughtiness) {
             return getBornInChaosKarma();
         }
-        return karma;
+        return get().karma;
     }
 
     public static void addKarma(int amount) {
         if (useBornInChaosNaughtiness) return;
-        karma = Math.max(MIN_KARMA, Math.min(MAX_KARMA, karma + amount));
-        TheUnwrittenParable.LOGGER.debug("Karma changed by " + amount + ". New karma: " + karma);
+        ChristmasKarma data = get();
+        data.karma = Math.max(MIN_KARMA, Math.min(MAX_KARMA, data.karma + amount));
+        TheUnwrittenParable.LOGGER.debug("Karma changed by " + amount + ". New karma: " + data.karma);
+        save();
     }
 
     public static void onVillagerHurt() {
@@ -100,19 +119,14 @@ public class ChristmasKarma {
     }
 
     private static int getBornInChaosKarma() {
-        try {
-            Class<?> naughtinessClass = Class.forName("net.mcreator.borninchaosv.init.BornInChaosV1ModGameRules");
-            TheUnwrittenParable.LOGGER.debug("Born in Chaos game rules found");
-        } catch (ClassNotFoundException e) {
-            TheUnwrittenParable.LOGGER.debug("Born in Chaos game rules not found");
-        }
         return NEUTRAL_KARMA;
     }
 
     private static void sendKarmaMessage(String type) {
+        ChristmasKarma data = get();
         long currentTime = System.currentTimeMillis();
-        if (currentTime - lastKarmaMessage < KARMA_MESSAGE_COOLDOWN) return;
-        lastKarmaMessage = currentTime;
+        if (currentTime - data.lastKarmaMessage < KARMA_MESSAGE_COOLDOWN) return;
+        data.lastKarmaMessage = currentTime;
 
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) return;
@@ -134,6 +148,36 @@ public class ChristmasKarma {
     }
 
     public static void reset() {
-        karma = NEUTRAL_KARMA;
+        ChristmasKarma data = get();
+        data.karma = NEUTRAL_KARMA;
+        save();
+    }
+
+    private static File getConfigFile() {
+        return new File(FMLPaths.CONFIGDIR.get().toFile(), FILE_NAME);
+    }
+
+    private static ChristmasKarma load() {
+        File file = getConfigFile();
+        if (file.exists()) {
+            try (Reader reader = new FileReader(file)) {
+                ChristmasKarma data = GSON.fromJson(reader, ChristmasKarma.class);
+                if (data != null) {
+                    return data;
+                }
+            } catch (Exception e) {
+                TheUnwrittenParable.LOGGER.error("Failed to load karma data", e);
+            }
+        }
+        return new ChristmasKarma();
+    }
+
+    private static void save() {
+        File file = getConfigFile();
+        try (Writer writer = new FileWriter(file)) {
+            GSON.toJson(get(), writer);
+        } catch (Exception e) {
+            TheUnwrittenParable.LOGGER.error("Failed to save karma data", e);
+        }
     }
 }

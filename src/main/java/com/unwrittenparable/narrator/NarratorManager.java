@@ -181,9 +181,12 @@ public class NarratorManager {
 
         String displayName;
         boolean isChristmas = ChristmasEvent.isChristmasActive();
+        boolean isHalloween = HalloweenEvent.isHalloweenActive();
 
         if (isChristmas) {
-            if (KrampusTransformation.isTransforming()) {
+            if (KrampusTransformation.isKrampusAwakened()) {
+                displayName = "\u00A76\u00A7lKrampus";
+            } else if (KrampusTransformation.isTransforming()) {
                 displayName = KrampusTransformation.getTransformedName();
             } else {
                 String listStatus = ChristmasKarma.getListStatus();
@@ -193,6 +196,8 @@ public class NarratorManager {
                     KrampusTransformation.startTransformation();
                 }
             }
+        } else if (isHalloween) {
+            displayName = "Herobrine";
         } else if (isHerobrine) {
             displayName = narratorName;
         } else if (isMultiplayer) {
@@ -204,11 +209,23 @@ public class NarratorManager {
         displayName = limitTextWidth(mc, displayName);
 
         if (isChristmas) {
-            int karmaColor = KrampusTransformation.isTransforming() ? KrampusTransformation.getTransformationColor() : ChristmasKarma.getKarmaColor();
-            BossEvent.BossBarColor barColor = KrampusTransformation.isTransforming() ? KrampusTransformation.getBossBarColor() : 
-                                              ChristmasKarma.isOnNiceList() ? BossEvent.BossBarColor.GREEN : 
-                                              ChristmasKarma.isOnNaughtyList() ? BossEvent.BossBarColor.RED : BossEvent.BossBarColor.YELLOW;
+            int karmaColor;
+            BossEvent.BossBarColor barColor;
+            
+            if (KrampusTransformation.isKrampusAwakened()) {
+                karmaColor = 0xFFD700;
+                barColor = BossEvent.BossBarColor.YELLOW;
+            } else if (KrampusTransformation.isTransforming()) {
+                karmaColor = KrampusTransformation.getTransformationColor();
+                barColor = KrampusTransformation.getBossBarColor();
+            } else {
+                karmaColor = ChristmasKarma.getKarmaColor();
+                barColor = ChristmasKarma.isOnNiceList() ? BossEvent.BossBarColor.GREEN : 
+                           ChristmasKarma.isOnNaughtyList() ? BossEvent.BossBarColor.RED : BossEvent.BossBarColor.YELLOW;
+            }
             NarratorBossBar.showBossBar(displayName, 180000, () -> {}, karmaColor, false, barColor);
+        } else if (isHalloween) {
+            NarratorBossBar.showBossBar(displayName, 180000, () -> {}, 0xAA00AA, true, BossEvent.BossBarColor.PURPLE);
         } else {
             NarratorBossBar.showBossBar(displayName, 180000, () -> {});
         }
@@ -221,6 +238,8 @@ public class NarratorManager {
             Minecraft.getInstance().execute(() -> {
                 if (isChristmas) {
                     showChristmasMessage(player, messageKey);
+                } else if (isHalloween) {
+                    showHerobrineMessage(player, "Herobrine", messageKey);
                 } else if (isHerobrine) {
                     animateHerobrineName(player, narratorName, messageKey);
                 } else {
@@ -331,12 +350,29 @@ public class NarratorManager {
         String translatedMsg = I18n.get(messageKey, playerName);
         String limitedMsg = limitTextWidth(mc, translatedMsg);
 
-        Component titleComponent = Component.literal("Father Christmas").withStyle(style -> style.withColor(0x55FF55));
-        Component subtitleComponent = Component.literal(limitedMsg).withStyle(style -> style.withColor(0xFFFFFF));
+        if (KrampusTransformation.isTransforming()) {
+            KrampusTransformation.animateTransformation(player);
+            
+            SCHEDULER.schedule(() -> {
+                Minecraft.getInstance().execute(() -> {
+                    if (mc.gui == null) return;
+                    Component subtitleComponent = Component.literal(limitedMsg).withStyle(style -> style.withColor(0xFFFFFF));
+                    mc.gui.setSubtitle(subtitleComponent);
+                    mc.gui.setTimes(10, 60, 10);
+                });
+            }, 1600, TimeUnit.MILLISECONDS);
+        } else {
+            String listStatus = ChristmasKarma.getListStatus();
+            String displayName = "Father Christmas (" + listStatus + " list)";
+            int karmaColor = ChristmasKarma.getKarmaColor();
+            
+            Component titleComponent = Component.literal(displayName).withStyle(style -> style.withColor(karmaColor));
+            Component subtitleComponent = Component.literal(limitedMsg).withStyle(style -> style.withColor(0xFFFFFF));
 
-        mc.gui.setTitle(titleComponent);
-        mc.gui.setSubtitle(subtitleComponent);
-        mc.gui.setTimes(10, 60, 10);
+            mc.gui.setTitle(titleComponent);
+            mc.gui.setSubtitle(subtitleComponent);
+            mc.gui.setTimes(10, 60, 10);
+        }
 
         if (mc.player != null) {
             mc.player.playNotifySound(SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.AMBIENT, 0.5f, 1.2f);

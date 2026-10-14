@@ -16,6 +16,7 @@ import java.util.concurrent.*;
 @OnlyIn(Dist.CLIENT)
 public class KrampusTransformation {
     private static boolean transforming = false;
+    private static boolean krampusAwakened = false;
     private static int transformationStep = 0;
     private static final int MAX_STEPS = 10;
     private static long lastTransformationTime = 0;
@@ -29,7 +30,7 @@ public class KrampusTransformation {
     };
 
     public static void startTransformation() {
-        if (!transforming) {
+        if (!transforming && !krampusAwakened) {
             transforming = true;
             transformationStep = 0;
             lastTransformationTime = System.currentTimeMillis();
@@ -39,11 +40,16 @@ public class KrampusTransformation {
 
     public static void stopTransformation() {
         transforming = false;
+        krampusAwakened = false;
         transformationStep = 0;
     }
 
     public static boolean isTransforming() {
         return transforming;
+    }
+
+    public static boolean isKrampusAwakened() {
+        return krampusAwakened;
     }
 
     public static void update() {
@@ -63,6 +69,7 @@ public class KrampusTransformation {
 
     public static String getTransformedName() {
         String baseName = "Father Christmas";
+        if (krampusAwakened) return "Krampus";
         if (!transforming) return baseName;
 
         int galacticCount = (int) Math.floor((double) transformationStep / MAX_STEPS * baseName.length());
@@ -86,6 +93,7 @@ public class KrampusTransformation {
     }
 
     public static int getTransformationColor() {
+        if (krampusAwakened) return 0xFFD700;
         if (!transforming) return 0x55FF55;
         
         double progress = (double) transformationStep / MAX_STEPS;
@@ -98,12 +106,59 @@ public class KrampusTransformation {
     }
 
     public static BossEvent.BossBarColor getBossBarColor() {
+        if (krampusAwakened) return BossEvent.BossBarColor.YELLOW;
         if (!transforming) return BossEvent.BossBarColor.GREEN;
         
         double progress = (double) transformationStep / MAX_STEPS;
         if (progress >= 0.8) return BossEvent.BossBarColor.YELLOW;
         if (progress >= 0.4) return BossEvent.BossBarColor.RED;
         return BossEvent.BossBarColor.RED;
+    }
+
+    public static void animateTransformation(LocalPlayer player) {
+        if (!transforming) return;
+
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.gui == null) return;
+
+        String baseName = "Father Christmas";
+        int galacticCount = (int) Math.floor((double) transformationStep / MAX_STEPS * baseName.length());
+        int color = getTransformationColor();
+
+        for (int i = 0; i <= baseName.length(); i++) {
+            final int index = i;
+            final int finalColor = color;
+            
+            ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+            scheduler.schedule(() -> {
+                Minecraft.getInstance().execute(() -> {
+                    if (mc.gui == null) return;
+                    
+                    StringBuilder partialName = new StringBuilder();
+                    for (int j = 0; j < baseName.length(); j++) {
+                        if (j < index && j < galacticCount) {
+                            char c = Character.toLowerCase(baseName.charAt(j));
+                            int charIndex = c - 'a';
+                            if (charIndex >= 0 && charIndex < GALACTIC_CHARS.length) {
+                                partialName.append(GALACTIC_CHARS[charIndex]);
+                            } else {
+                                partialName.append(baseName.charAt(j));
+                            }
+                        } else if (j < index) {
+                            partialName.append(baseName.charAt(j));
+                        }
+                    }
+                    
+                    mc.gui.setTitle(Component.literal(partialName.toString()).withStyle(style -> style.withColor(finalColor)));
+                    mc.gui.setSubtitle(Component.literal("...").withStyle(style -> style.withColor(0xFFFFFF)));
+                    mc.gui.setTimes(0, 10, 0);
+                });
+            }, i * 100, TimeUnit.MILLISECONDS);
+            
+            scheduler.schedule(() -> {
+                scheduler.shutdown();
+            }, i * 100 + 200, TimeUnit.MILLISECONDS);
+        }
     }
 
     private static void completeTransformation() {
@@ -116,14 +171,15 @@ public class KrampusTransformation {
         int karma = ChristmasKarma.getKarma();
         int krampusHealth = calculateKrampusHealth(karma);
 
-        player.sendSystemMessage(Component.literal("\u00A74\u00A7l[KRAMPUS HAS AWAKENED]"));
-        player.sendSystemMessage(Component.literal("\u00A74Your naughtiness has summoned Krampus!"));
-        player.sendSystemMessage(Component.literal("\u00A74Krampus Health: " + krampusHealth));
+        player.sendSystemMessage(Component.literal("\u00A76\u00A7l[KRAMPUS HAS AWAKENED]"));
+        player.sendSystemMessage(Component.literal("\u00A76Your naughtiness has summoned Krampus!"));
+        player.sendSystemMessage(Component.literal("\u00A76Krampus Health: " + krampusHealth));
 
-        String krampusName = "\u00A74\u00A7lKrampus";
-        NarratorBossBar.showBossBar(krampusName, 300000, () -> {}, 0xFF0000, true, BossEvent.BossBarColor.RED);
+        String krampusName = "\u00A76\u00A7lKrampus";
+        NarratorBossBar.showBossBar(krampusName, 300000, () -> {}, 0xFFD700, true, BossEvent.BossBarColor.YELLOW);
 
         transforming = false;
+        krampusAwakened = true;
         transformationStep = 0;
     }
 
@@ -136,6 +192,7 @@ public class KrampusTransformation {
     }
 
     public static double getTransformationProgress() {
+        if (krampusAwakened) return 1.0;
         return (double) transformationStep / MAX_STEPS;
     }
 }
